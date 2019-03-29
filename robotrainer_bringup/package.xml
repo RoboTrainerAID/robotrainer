@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robotrainer_bringup</name>
+  <version>0.0.0</version>
+  <description>The robotrainer_bringup package</description>
+
+  <maintainer email="urduq@student.kit.edu">Peter Wern</maintainer>
+
+  <license>TODO</license>
+
+
+  <!-- Url tags are optional, but mutiple are allowed, one per tag -->
+  <!-- Optional attribute type can be: website, bugtracker, or repository -->
+  <!-- Example: -->
+  <!-- <url type="website">http://wiki.ros.org/sr2_bringup</url> -->
+
+
+  <!-- Author tags are optional, mutiple are allowed, one per tag -->
+  <!-- Authors do not have to be maintianers, but could be -->
+  <!-- Example: -->
+  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>sr2_bringup</depend>
+  <depend>robotrainer_modalities</depend>
+  <depend>robotrainer_editor</depend>
+  <test_depend>roslaunch</test_depend>
+
+</package>
