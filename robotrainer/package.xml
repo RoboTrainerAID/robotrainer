@@ -53,7 +53,6 @@
   <exec_depend>robotrainer_bringup</exec_depend>
   <exec_depend>robotrainer_hw_config</exec_depend>
   <exec_depend>robotrainer_modalities</exec_depend>
-  <exec_depend>robotrainer_parameters</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
