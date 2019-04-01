@@ -1,0 +1,76 @@
+## joint_names
+joint_names: [fr_caster_rotation_joint, fl_caster_rotation_joint, br_caster_rotation_joint, bl_caster_rotation_joint, fr_caster_r_wheel_joint, fl_caster_r_wheel_joint, br_caster_r_wheel_joint, bl_caster_r_wheel_joint]
+
+## joint_state_controller
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 200
+  wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
+    - steer: fl_caster_rotation_joint
+      drive: fl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: bl_caster_rotation_joint
+      drive: bl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: br_caster_rotation_joint
+      drive: br_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: fr_caster_rotation_joint
+      drive: fr_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+
+#fts_controller:
+twist_controller:
+  use_fts: true
+  type: robotrainer_force_control/RobotrainerForceController
+  required_drive_mode: 3
+  publish_rate: 200
+  max_rot_velocity: 0.05 #in Radian/sec
+  max_trans_velocity: 1.0 #in m/s
+  Controller:
+    backwards_max_vel_scale: 0.25 #0.25
+    x_force_controller: True
+    y_force_controller: True
+    rot_controller: False
+    linear:
+        x_min_force: 5.0        # 3.0 Newton
+        x_max_force: 200.0      # 120.0 Newton
+        x_max_vel: 1.0          # in m/s
+        y_min_force: 3.0        # 3.0 Newton
+        y_max_force: 120.0      # 120.0 Newton
+        y_max_vel: 0.5          # in m/s
+    angular:
+        min_torque: 0.5         # 0.1 Newton
+        max_torque: 30.0        # 120.0 Newton
+        max_rot_vel: 0.05       # in radian/sec
+    admittance:                 # Mass value ranges are for 0.1s - 1.0s settling times
+        mass:
+            x_forward: 12.78   # in range of 3.07 - 30.67
+            x_backward: 30.67  # in range of 12.27 - 122.7
+            y: 15.34           # in range of 6.13 - 61.35
+            rot: 1.92          # in range of 0.77 - 7.67
+        damping:
+            min:
+                x_forward:
+                x_backward:
+                y:
+                rot:
+           max:
+                x_forward:
+                x_backward:
+                y:
+                rot:
+        sampling_frequency: 645.0
+  wheels: *wheels # start front left, counter-clockwise for base_drive_chain 
+
+## odometry_controller
+odometry_controller:
+  type: cob_omni_drive_controller/OdometryController
+  publish_rate: 200
+  frame_id: "/odom_combined"
+  child_frame_id: "/base_footprint"
+  cov_pose: 0.1
+  cov_twist: 0.1
+  defaults: # default settings for all wheels, can per overwritten per wheel
+    wheel_radius: 0.080 # Radius of the wheels in [m]  
+wheels: *wheels
