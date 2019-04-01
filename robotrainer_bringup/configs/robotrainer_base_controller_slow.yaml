@@ -42,7 +42,7 @@ joint_state_controller:
 #fts_controller:
 twist_controller:
   use_fts: true
-  type: hibrid_force_controllers/FTSController
+  type: robotrainer_controllers/FTSController
   required_drive_mode: 3
   publish_rate: 50
   max_rot_velocity: 1.0 #0.2
