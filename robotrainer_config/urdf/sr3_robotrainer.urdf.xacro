@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sr3_robotrainer" >
+
+  <!-- common stuff -->
+  <xacro:include filename="$(find iirob_description)/common/urdf/common.urdf.xacro" />
+  <xacro:include filename="$(find iirob_description)/common/urdf/materials.urdf.xacro" />
+
+
+  <xacro:arg name="sim" default="false"/>
+  <xacro:arg name="neck" default="false"/>
+  <xacro:arg name="neck_camera" default="false"/>
+  <xacro:arg name="fts" default="false"/>
+  <xacro:arg name="fts_sim" default="false"/>
+  <xacro:arg name="sick_visionary_t" default="false"/>
+
+  <!-- sr3 base -->
+  <xacro:include filename="$(find robotrainer_config)/urdf/sr3.urdf.xacro" />
+
+  <!-- composition of the robot -->
+  <xacro:sr3 name="base"/>
+
+
+
+  <!-- COMPONENTS -->
+  <joint name="led_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="led_joint" />
+  </joint>
+  <link name="led_joint">
+  </link>
+
+  <!--   FTS -->
+  <xacro:include filename="$(find ati_force_torque)/description/urdf/macros/mini58.urdf.xacro" />
+
+  <xacro:ati_mini58 name="fts" parent="base_link">
+    <origin xyz="-0.348 0  0.96" rpy="0 0 0" />
+  </xacro:ati_mini58>
+
+  <xacro:include filename="$(find sick_visionary_t_driver)/description/urdf/visionary_t_macro.urdf.xacro" />
+
+  <xacro:sick_visionary_t parent="base_link" has_holder="true" holder_tilt="${0/180*pi}">
+    <origin xyz="0.2 0.0 0.01" rpy="0 0 0" />
+  </xacro:sick_visionary_t>
+
+</robot>
