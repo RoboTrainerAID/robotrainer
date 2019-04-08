@@ -26,7 +26,7 @@ twist_controller:
         publish_rate: 50
         max_rot_velocity: 1.0 #0.2
         max_trans_velocity: 1.5 #0.2
-        Controller:
+        FTSBaseController:
                 y_reversed: False
                 rot_reversed: False
                 update_rate: 200.0
@@ -50,6 +50,9 @@ twist_controller:
                 rot_max_rot_vel: 1.8
                 rot_gain: 1
                 rot_time_const: 0.25
+        FTSAdaptiveDynamicsController:
+                dynamic_scale: 1.0
+                x
         
         defaults: # default settings for all wheels, can per overwritten per wheel
                 steer_ctrl: # Parameters for tuning Impedance-Controller
