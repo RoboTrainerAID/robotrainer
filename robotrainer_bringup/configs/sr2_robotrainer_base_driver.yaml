@@ -1,5 +1,5 @@
 sync:
-  interval_ms: 20
+  interval_ms: 5
   overflow: 0
 heartbeat:
   rate: 20
