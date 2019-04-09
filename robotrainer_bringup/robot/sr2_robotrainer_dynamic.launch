@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-robotrainer)"/>
+    <arg name="sim" default="false"/>
+    <arg name="fts_sim" default="false"/>
+    
+    <arg name="driver_yaml" default="$(find robotrainer_bringup)/configs/sr2_robotrainer_base_driver.yaml"/>
+    <arg name="controller_yaml" default="$(find robotrainer_bringup)/configs/robotrainer_fts_adaptive_dynamics_controller.yaml"/>
+    <arg name="robotrainer_modalities_yaml" default="$(find robotrainer_bringup)/configs/modalities.yaml" />
+
+    <include file="$(find sr2_bringup)/robot/sr2.launch" >
+        <arg name="robot_env" value="$(arg robot_env)"/>
+        <arg name="navigation" value="true"/>
+        <arg name="driver_yaml" value="$(arg driver_yaml)"/>
+        <arg name="controller_yaml" value="$(arg controller_yaml)"/>
+        <arg name="unload_default_controller" value="true"/>
+        <arg name="fts" value="true"/>
+        <arg name="fts_sim" value="$(arg fts_sim)"/>
+        <arg name="sim" value="$(arg sim)"/>
+    </include>
+    
+<!--    <group ns="base">
+        <node pkg="controller_manager" type="controller_manager" name="base_controller_loader" args="load fts_controller" respawn="false" output="screen"/>
+    </group>-->
+    
+
+    <rosparam command="load" file="$(find robotrainer_bringup)/configs/modalities_chain.yaml" />
+    <rosparam command="load" file="$(arg robotrainer_modalities_yaml)" />
+    
+</launch>
+
