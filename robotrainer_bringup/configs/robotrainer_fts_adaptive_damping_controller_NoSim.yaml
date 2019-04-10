@@ -27,7 +27,7 @@ twist_controller:
         max_rot_velocity: 1.0 #0.2
         max_trans_velocity: 1.5 #0.2
         FTSBaseController:
-                simulate: True
+                simulate: False
                 update_rate: 200.0
                 # trigger inversion of y and rotation outputs
                 y_reversed: False
