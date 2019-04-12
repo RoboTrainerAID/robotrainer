@@ -21,7 +21,7 @@ joint_state_controller:
   
 twist_controller:
         use_fts: true
-        type: robotrainer_controllers/FTSAdaptiveDynamicsController
+        type: robotrainer_controllers/FTSAdaptiveController
         required_drive_mode: 3
         publish_rate: 50
         max_rot_velocity: 1.0 #0.2
@@ -57,9 +57,12 @@ twist_controller:
                 rot_max_rot_vel: 1.2
                 rot_gain: 1.0
                 rot_time_const: 0.5
-        FTSAdaptiveDynamicsController:
-                dynamic_scale: 0.9 # define time dynamics as a scaling factor of the above-given base values (1.0 meaning 100%)
-        
+        FTSAdaptiveController:
+                dynamic_scale: 1.0 # define responsiveness of the system (1.0 meaning 100% of above-given base values)
+                use_adaptive_force: False     #whether to use velocity-adaptive force feature
+                force_scale_zero_vel: 1.0       # force scaling factor when accelerating from zero [min: 1.0] - higher means heavier
+                force_scale_max_vel: 1.0        # force scaling factor when moving close to max vel [max: 1.0] - lower means easier to maintain high speeds
+                
         defaults: # default settings for all wheels, can per overwritten per wheel
                 steer_ctrl: # Parameters for tuning Impedance-Controller
                         spring: 15.0

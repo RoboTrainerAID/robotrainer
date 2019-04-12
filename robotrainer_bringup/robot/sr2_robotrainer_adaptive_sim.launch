@@ -6,7 +6,7 @@
     <arg name="fts_sim" default="false"/>
     
     <arg name="driver_yaml" default="$(find robotrainer_bringup)/configs/sr2_robotrainer_base_driver.yaml"/>
-    <arg name="controller_yaml" default="$(find robotrainer_bringup)/configs/robotrainer_fts_adaptive_dynamics_controller.yaml"/>
+    <arg name="controller_yaml" default="$(find robotrainer_bringup)/configs/robotrainer_fts_adaptive_controller_sim.yaml"/>
     <arg name="robotrainer_modalities_yaml" default="$(find robotrainer_bringup)/configs/modalities.yaml" />
 
     <include file="$(find sr2_bringup)/robot/sr2.launch" >
