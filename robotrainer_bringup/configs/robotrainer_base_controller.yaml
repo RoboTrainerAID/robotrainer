@@ -3,96 +3,78 @@ joint_names: [fr_caster_rotation_joint, fl_caster_rotation_joint, br_caster_rota
 
 ## joint_state_controller
 joint_state_controller:
-  type: joint_state_controller/JointStateController
-  publish_rate: 50
-
-## twist_controller
-#twist_controller:
-  #use_fts: false
-  #type: cob_omni_drive_controller/WheelController
-  #required_drive_mode: 3
-  ##max_rot_velocity: 1.0
-  ##max_trans_velocity: 1.0
-  #pub_divider: 1
-  #timeout: 0.5
-
-  #defaults: # default settings for all wheels, can per overwritten per wheel
-    #steer_ctrl: # Parameters for tuning Impedance-Controller
-      #spring: 15.0
-      #damp: 2.75
-      #virt_mass: 0.1 
-      #d_phi_max: 12.0
-      #dd_phi_max: 40.0
-
-  wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
-    - steer: fl_caster_rotation_joint
-      drive: fl_caster_r_wheel_joint
-      steer_neutral_position: 180.0
-    - steer: bl_caster_rotation_joint
-      drive: bl_caster_r_wheel_joint
-      steer_neutral_position: 180.0
-    - steer: br_caster_rotation_joint
-      drive: br_caster_r_wheel_joint
-      steer_neutral_position: 180.0
-    - steer: fr_caster_rotation_joint
-      drive: fr_caster_r_wheel_joint
-      steer_neutral_position: 180.0
+        type: joint_state_controller/JointStateController
+        publish_rate: 50
+        wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
+              - steer: fl_caster_rotation_joint
+                drive: fl_caster_r_wheel_joint
+                steer_neutral_position: 180.0
+              - steer: bl_caster_rotation_joint
+                drive: bl_caster_r_wheel_joint
+                steer_neutral_position: 180.0
+              - steer: br_caster_rotation_joint
+                drive: br_caster_r_wheel_joint
+                steer_neutral_position: 180.0
+              - steer: fr_caster_rotation_joint
+                drive: fr_caster_r_wheel_joint
+                steer_neutral_position: 180.0
   
-# TODO: Rename this to twist_controller if needed
-#fts_controller:
 twist_controller:
-  use_fts: true
-  type: robotrainer_controllers/FTSController
-  required_drive_mode: 3
-  publish_rate: 50
-  max_rot_velocity: 1.0 #0.2
-  max_trans_velocity: 1.5 #0.2
-  FTSController:
-    SamplingFrequency: 645.0
-    DampingFrequency: 20.0
-    DampingIntensity: -3.0
-    y_reversed: False
-    rot_reversed: False
-    update_rate: 200.0
-    dist_force_scale: 0.5       # Should be between 0 and 1
-    backwards_max_force_scale: 0.5
-    backwards_max_vel_scale: 0.7 #0.25
-    x_force_controller: True
-    y_force_controller: True
-    rot_controller: True
-    x_min_force: 3.0        # 5.0
-    x_max_force: 120.0
-    x_max_vel: 1.1
-    x_gain: 2               # 1/b
-    x_time_const: 1        # m/b   # 1/(2*pi*Fl)        
-    y_min_force: 3.0        # 5.0
-    y_max_force: 120.0
-    y_max_vel: 1.1
-    y_gain: 2               # 1/b
-    y_time_const: 1        # m/b   # 1/(2*pi*Fl)
-    rot_min_torque: 0.1    # 0.5
-    rot_max_torque: 30.0
-    rot_max_rot_vel: 1.8
-    rot_gain: 1
-    rot_time_const: 0.25
-  defaults: # default settings for all wheels, can per overwritten per wheel
-    steer_ctrl: # Parameters for tuning Impedance-Controller
-      spring: 15.0
-      damp: 2.75
-      virt_mass: 0.1 
-      d_phi_max: 12.0
-      dd_phi_max: 40.0
+        use_fts: true
+        type: robotrainer_controllers/FTSController
+        required_drive_mode: 3
+        publish_rate: 50
+        max_rot_velocity: 1.0 #0.2
+        max_trans_velocity: 1.5 #0.2
+        FTSBaseController:
+                simulate: False
+                update_rate: 200.0
+                # trigger inversion of y and rotation outputs
+                y_reversed: False
+                rot_reversed: False
+                # scale for negative x-direction
+                backwards_max_force_scale: 0.5
+                backwards_max_vel_scale: 0.7 #0.25
+                # trigger using controllers
+                x_force_controller: True
+                y_force_controller: True
+                rot_controller: True
+                # x-direction parameters
+                x_min_force: 3.0        # 5.0
+                x_max_force: 100.0
+                x_max_vel: 1.2
+                x_gain: 1.0               # 1/b
+                x_time_const: 0.5        # m/b   # 1/(2*pi*Fl)  
+                # y-direction parameters
+                y_min_force: 3.0        # 5.0
+                y_max_force: 100.0
+                y_max_vel: 1.2
+                y_gain: 1.0              # 1/b
+                y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
+                # rotational (z-dir) parameters
+                rot_min_torque: 0.1    # 0.5
+                rot_max_torque: 40.0
+                rot_max_rot_vel: 1.2
+                rot_gain: 1.0
+                rot_time_const: 0.5
+        defaults: # default settings for all wheels, can per overwritten per wheel
+                steer_ctrl: # Parameters for tuning Impedance-Controller
+                        spring: 15.0
+                        damp: 2.75
+                        virt_mass: 0.1 
+                        d_phi_max: 12.0
+                        dd_phi_max: 40.0
 
-  wheels: *wheels # start front left, counter-clockwise for base_drive_chain 
+        wheels: *wheels # start front left, counter-clockwise for base_drive_chain 
 
 ## odometry_controller
 odometry_controller:
-  type: cob_omni_drive_controller/OdometryController
-  publish_rate: 50
-  frame_id: "/odom_combined"
-  child_frame_id: "/base_footprint"
-  cov_pose: 0.1
-  cov_twist: 0.1
-  defaults: # default settings for all wheels, can per overwritten per wheel
-    wheel_radius: 0.080 # Radius of the wheels in [m]
-  wheels: *wheels
+        type: cob_omni_drive_controller/OdometryController
+        publish_rate: 50
+        frame_id: "/odom_combined"
+        child_frame_id: "/base_footprint"
+        cov_pose: 0.1
+        cov_twist: 0.1
+        defaults: # default settings for all wheels, can per overwritten per wheel
+                wheel_radius: 0.080 # Radius of the wheels in [m]
+        wheels: *wheels
