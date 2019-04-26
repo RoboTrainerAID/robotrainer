@@ -60,15 +60,22 @@ twist_controller:
         # parameters for Adaptive FTS controller are to be defined here:
         # all values with a 'scale' in the name are meant as multiplicative values of the respective base value defined in FTSBaseController. Maximum or minimum values for these fields are defined in the comments 
         FTSAdaptiveController:
-                use_adaptive_force: False       # whether to use velocity-adaptive force feature
-                force_scale_zero_vel: 1.0       # force scaling factor when accelerating from zero [min: 1.0] - higher means heavier
-                force_scale_max_vel: 1.0        # force scaling factor when moving close to max vel [max: 1.0] - lower means easier to maintain high speeds
-                use_adaptive_mass: False     # whether to use velocity-adaptive mass feature
-                mass_scale_min: 1.0          # minimal mass (values <= 1.0 allowed)
-                mass_scale_max: 1.0          # maximum mass (values >= 1.0 allowed)
-                use_adaptive_damping: False     # whether to use velocity-adaptive damping feature
-                damping_scale_min: 1.0          # minimal damping (values <= 1.0 allowed)
-                damping_scale_max: 1.0          # maximum damping (values >= 1.0 allowed)
+                adaptive_force:
+                        use_adaptive_force: False       # whether to use velocity-adaptive force feature
+                        force_scale_zero_vel: 1.5       # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
+                        force_scale_max_vel: 0.5        # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
+                adaptive_mass:
+                        use_adaptive_mass: False        # whether to use velocity-adaptive mass feature
+                        mass_scale_min: 1.0             # minimal mass (values <= 1.0 allowed)
+                        mass_scale_max: 1.0             # maximum mass (values >= 1.0 allowed)
+                adaptive_damping:
+                        use_adaptive_damping: False     # whether to use velocity-adaptive damping feature
+                        damping_scale_min: 1.0          # minimal damping (values <= 1.0 allowed)
+                        damping_scale_max: 1.0          # maximum damping (values >= 1.0 allowed)
+                cutoff:
+                        use_smooth_cutoff: False        # whether to use smooth cutoff feature (stronger adaption until max_adaption percent)
+                        max_adaption_percent: 0.8       # factor of max velocity, until which 90% of the adaption is performed -> allowing stronger adaption at regular movement velocity
+                rotation_scale_factor: 1.0
                 
         defaults: # default settings for all wheels, can per overwritten per wheel
                 steer_ctrl: # Parameters for tuning Impedance-Controller
