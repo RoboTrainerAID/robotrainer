@@ -62,8 +62,8 @@ twist_controller:
         FTSAdaptiveController:
                 adaptive_force:
                         use_adaptive_force: False       # whether to use velocity-adaptive force feature
-                        force_scale_zero_vel: 1.0       # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
-                        force_scale_max_vel: 1.0        # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
+                        force_scale_zero_vel: 1.5       # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
+                        force_scale_max_vel: 0.5        # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
                 adaptive_mass:
                         use_adaptive_mass: False        # whether to use velocity-adaptive mass feature
                         mass_scale_min: 1.0             # minimal mass (values <= 1.0 allowed)
