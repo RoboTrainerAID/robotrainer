@@ -53,7 +53,7 @@ twist_controller:
                 y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
                 # rotational (z-dir) parameters
                 rot_min_torque: 0.1    # 0.5
-                rot_max_torque: 40.0
+                rot_max_torque: 30.0
                 rot_max_rot_vel: 1.2
                 rot_gain: 1.0
                 rot_time_const: 0.5
@@ -66,8 +66,8 @@ twist_controller:
                         force_scale_max_vel: 0.5        # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
                 adaptive_mass:
                         use_adaptive_mass: False        # whether to use velocity-adaptive mass feature
-                        mass_scale_min: 1.0             # minimal mass (values <= 1.0 allowed)
-                        mass_scale_max: 1.0             # maximum mass (values >= 1.0 allowed)
+                        mass_scale_min: 0.35             # minimal mass (values <= 1.0 allowed)
+                        mass_scale_max: 2.0             # maximum mass (values >= 1.0 allowed)
                 adaptive_damping:
                         use_adaptive_damping: False     # whether to use velocity-adaptive damping feature
                         damping_scale_min: 1.0          # minimal damping (values <= 1.0 allowed)
@@ -77,7 +77,7 @@ twist_controller:
                         max_adaption_percent: 0.8       # factor of max velocity, until which 90% of the adaption is performed -> allowing stronger adaption at regular movement velocity
                 transition:
                         use_smooth_transition: False    # whether to use smooth transition function, which adapts the parameters faster with lower velocities
-                        transition_rate: 0.1            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
+                        transition_rate: 0.7            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
                 rotation_scale_factor: 1.0
                 
         defaults: # default settings for all wheels, can per overwritten per wheel
