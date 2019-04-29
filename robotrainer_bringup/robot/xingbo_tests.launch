@@ -25,7 +25,9 @@
 
     <include ns="robotrainer" file="$(find ipr_helpers)/launch/extract_mobile_robot_base.launch" />
     
-    <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch" />    
+    <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch" />
+    
+    <include file="$(find robotrainer_deviation)/launch/robotrainer_deviation.launch" />
 
     <!--include file="$(find robotrainer_deviation)/launch/robotrainer_deviation.launch" >
 
