@@ -21,7 +21,7 @@ joint_state_controller:
   
 twist_controller:
         use_fts: true
-        type: robotrainer_controllers/FTSController
+        type: robotrainer_controllers/FTSBaseController
         required_drive_mode: 3
         publish_rate: 50
         max_rot_velocity: 1.0 #0.2
@@ -53,7 +53,7 @@ twist_controller:
                 y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
                 # rotational (z-dir) parameters
                 rot_min_torque: 0.1    # 0.5
-                rot_max_torque: 40.0
+                rot_max_torque: 30.0
                 rot_max_rot_vel: 1.2
                 rot_gain: 1.0
                 rot_time_const: 0.5

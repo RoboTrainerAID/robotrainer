@@ -92,7 +92,7 @@ twist_controller:
                                 rot: 1.0
                 transition:
                         use_smooth_transition: False    # whether to use smooth transition function, which adapts the parameters faster with lower velocities
-                        transition_rate: 0.7            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
+                        transition_rate: 0.1            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
                 
         defaults: # default settings for all wheels, can per overwritten per wheel
                 steer_ctrl: # Parameters for tuning Impedance-Controller
