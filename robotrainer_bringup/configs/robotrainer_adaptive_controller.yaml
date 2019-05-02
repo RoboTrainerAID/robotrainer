@@ -62,23 +62,37 @@ twist_controller:
         FTSAdaptiveController:
                 adaptive_force:
                         use_adaptive_force: False       # whether to use velocity-adaptive force feature
-                        force_scale_zero_vel: 1.5       # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
-                        force_scale_max_vel: 0.5        # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
+                        force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
+                                x: 1.5
+                                y: 1.5
+                                rot: 1.0
+                        force_scale_max_vel:    # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
+                                x: 0.35
+                                y: 0.35
+                                rot: 0.35
                 adaptive_mass:
                         use_adaptive_mass: False        # whether to use velocity-adaptive mass feature
-                        mass_scale_min: 0.35             # minimal mass (values <= 1.0 allowed)
-                        mass_scale_max: 2.0             # maximum mass (values >= 1.0 allowed)
+                        mass_scale_min:         # minimal mass (values <= 1.0 allowed)
+                                x: 0.4
+                                y: 0.4
+                                rot: 0.4
+                        mass_scale_max:         # maximum mass (values >= 1.0 allowed)
+                                x: 2.0
+                                y: 2.0
+                                rot: 1.0
                 adaptive_damping:
                         use_adaptive_damping: False     # whether to use velocity-adaptive damping feature
-                        damping_scale_min: 1.0          # minimal damping (values <= 1.0 allowed)
-                        damping_scale_max: 1.0          # maximum damping (values >= 1.0 allowed)
-                cutoff:
-                        use_smooth_cutoff: False        # whether to use smooth cutoff feature (stronger adaption until max_adaption percent)
-                        max_adaption_percent: 0.8       # factor of max velocity, until which 90% of the adaption is performed -> allowing stronger adaption at regular movement velocity
+                        damping_scale_min:      # minimal damping (values <= 1.0 allowed)
+                                x: 1.0
+                                y: 1.0
+                                rot: 1.0
+                        damping_scale_max:      # maximum damping (values >= 1.0 allowed)
+                                x: 1.0
+                                y: 1.0
+                                rot: 1.0
                 transition:
                         use_smooth_transition: False    # whether to use smooth transition function, which adapts the parameters faster with lower velocities
-                        transition_rate: 0.7            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
-                rotation_scale_factor: 1.0
+                        transition_rate: 0.1            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
                 
         defaults: # default settings for all wheels, can per overwritten per wheel
                 steer_ctrl: # Parameters for tuning Impedance-Controller
