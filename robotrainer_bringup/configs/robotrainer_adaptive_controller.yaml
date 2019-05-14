@@ -39,6 +39,7 @@ fts_adaptive_controller:
   # parameters for Adaptive FTS controller are to be defined here:
   # all values with a 'scale' in the name are meant as multiplicative values of the respective base value defined in FTSBaseController. Maximum or minimum values for these fields are defined in the comments 
   FTSAdaptiveController:
+    #adapt the maximum input forces of the system
     adaptive_force:
       use_adaptive_force: False       # whether to use velocity-adaptive force feature
       force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
@@ -49,6 +50,7 @@ fts_adaptive_controller:
         x: 0.35
         y: 0.35
         rot: 0.35
+    # adapt the virtual mass of the system
     adaptive_mass:
       use_adaptive_mass: False        # whether to use velocity-adaptive mass feature
       mass_scale_min:         # minimal mass (values <= 1.0 allowed)
@@ -59,6 +61,7 @@ fts_adaptive_controller:
         x: 2.0
         y: 2.0
         rot: 1.0
+    # adapt the damping of the system
     adaptive_damping:
       use_adaptive_damping: False     # whether to use velocity-adaptive damping feature
       damping_scale_min:      # minimal damping (values <= 1.0 allowed)
@@ -69,6 +72,12 @@ fts_adaptive_controller:
         x: 1.0
         y: 1.0
         rot: 1.0
+    # adapt the center of gravity
+    adaptive_cog:
+      adapt_cog: False  # whether to use virtual center of gravity instead of real one
+      cog_x: 0.1    # distance in negative x-direction (towards user) from real center of gravity to virtual one
+      cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
+    # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
     transition:
       use_smooth_transition: False    # whether to use smooth transition function, which adapts the parameters faster with lower velocities
       transition_rate: 0.1            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
