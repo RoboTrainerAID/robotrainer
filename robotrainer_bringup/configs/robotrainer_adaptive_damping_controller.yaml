@@ -1,0 +1,105 @@
+fts_adaptive_controller:
+  use_fts: true
+  type: robotrainer_controllers/FTSAdaptiveController
+  required_drive_mode: 3
+  publish_rate: 50
+  max_rot_velocity: 1.0 #0.2
+  max_trans_velocity: 1.5 #0.2
+  FTSBaseController:
+    simulate: False
+    update_rate: 200.0
+    # trigger inversion of y and rotation outputs
+    y_reversed: False
+    rot_reversed: False
+    # scale for negative x-direction
+    backwards_max_force_scale: 0.5
+    backwards_max_vel_scale: 0.7 #0.25
+    # trigger using controllers
+    x_force_controller: True
+    y_force_controller: True
+    rot_controller: True
+    # x-direction parameters
+    x_min_force: 3.0        # 5.0
+    x_max_force: 100.0
+    x_max_vel: 1.2
+    x_gain: 1.0               # 1/b
+    x_time_const: 0.5        # m/b   # 1/(2*pi*Fl)  
+    # y-direction parameters
+    y_min_force: 3.0        # 5.0
+    y_max_force: 100.0
+    y_max_vel: 1.2
+    y_gain: 1.0              # 1/b
+    y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
+    # rotational (z-dir) parameters
+    rot_min_torque: 0.1    # 0.5
+    rot_max_torque: 30.0
+    rot_max_rot_vel: 1.2
+    rot_gain: 1.0
+    rot_time_const: 0.5
+  # parameters for Adaptive FTS controller are to be defined here:
+  # all values with a 'scale' in the name are meant as multiplicative values of the respective base value defined in FTSBaseController. Maximum or minimum values for these fields are defined in the comments 
+  FTSAdaptiveController:
+    #adapt the maximum input forces of the system
+    adaptive_force:
+      use_adaptive_force: False       # whether to use velocity-adaptive force feature
+      force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
+        x: 1.5
+        y: 1.5
+        rot: 1.0
+      force_scale_max_vel:    # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
+        x: 0.35
+        y: 0.35
+        rot: 0.35
+    # adapt the virtual mass of the system
+    adaptive_mass:
+      use_adaptive_mass: False        # whether to use velocity-adaptive mass feature
+      mass_scale_min:         # minimal mass (values <= 1.0 allowed)
+        x: 0.4
+        y: 0.4
+        rot: 0.4
+      mass_scale_max:         # maximum mass (values >= 1.0 allowed)
+        x: 2.0
+        y: 2.0
+        rot: 1.0
+    # adapt the damping of the system
+    adaptive_damping:
+      use_adaptive_damping: False     # whether to use velocity-adaptive damping feature
+      damping_scale_min:      # minimal damping (values <= 1.0 allowed)
+        x: 1.0
+        y: 1.0
+        rot: 1.0
+      damping_scale_max:      # maximum damping (values >= 1.0 allowed)
+        x: 1.0
+        y: 1.0
+        rot: 1.0
+    # adapt the center of gravity
+    adaptive_cog:
+      adapt_cog: False  # whether to use virtual center of gravity instead of real one
+      cog_x: 0.1    # distance in negative x-direction (towards user) from real center of gravity to virtual one
+      cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
+    # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
+    transition:
+      use_smooth_transition: False    # whether to use smooth transition function, which adapts the parameters faster with lower velocities
+      transition_rate: 0.1            # Value between 0.05 and 1.0, which changes how fast the parameter will be adapted with low velocity, 1.0 being the fastest change (with 81% of the value at 20% of max speed
+        
+  defaults: # default settings for all wheels, can per overwritten per wheel
+    steer_ctrl: # Parameters for tuning Impedance-Controller
+      spring: 15.0
+      damp: 2.75
+      virt_mass: 0.1 
+      d_phi_max: 12.0
+      dd_phi_max: 40.0
+
+  wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
+    - steer: fl_caster_rotation_joint
+      drive: fl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: bl_caster_rotation_joint
+      drive: bl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: br_caster_rotation_joint
+      drive: br_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: fr_caster_rotation_joint
+      drive: fr_caster_r_wheel_joint
+      steer_neutral_position: 180.0
