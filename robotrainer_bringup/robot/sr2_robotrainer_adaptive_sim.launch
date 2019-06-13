@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-        
-        <include file="$(find robotrainer_bringup)/robot/sr2_robotrainer.launch" >
-                <arg name="robotrainer_controller_yaml" value="$(find robotrainer_bringup)/configs/robotrainer_adaptive_controller_sim.yaml"/>
-                <arg name="robotrainer_controller" value="fts_adaptive_controller"/>
-        </include>
-
-</launch>
