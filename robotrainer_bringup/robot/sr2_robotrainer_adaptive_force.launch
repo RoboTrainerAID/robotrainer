@@ -9,6 +9,10 @@
                 <arg name="not_all" value="$(arg not_all)"/>
         </include>
         
+        <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch" >
+                
+        </include>
+        
 </launch>
 
 
