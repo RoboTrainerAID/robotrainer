@@ -61,6 +61,10 @@ fts_adaptive_force_controller:
     transition:
       use_smooth_transition: False    # whether to use smooth transition function (adapts parameters faster with lower vel.)
       transition_rate: 0.1            # Value between 0.05 and 1.0 (changes how fast parameter will be adapted with low vel.)
+
+    parametrization:
+      x_base:
+        minForce: 70.0                # force value which is the minimum value in order to finish the first step
         
   defaults: # default settings for all wheels, can per overwritten per wheel
     steer_ctrl: # Parameters for tuning Impedance-Controller
