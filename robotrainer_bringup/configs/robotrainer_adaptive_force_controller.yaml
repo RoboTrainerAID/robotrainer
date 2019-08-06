@@ -66,12 +66,16 @@ fts_adaptive_force_controller:
       x_base:
         minForce: 70.0                # force value which is the minimum value in order to finish the first step
         springConst: 200
+        returnForce: 20.0
       y_base:
-        minForce: 70.0
+        minForce: 60.0
         springConst: 200
+        returnForce: 15.0
       rot_base:
         minTorque: 10.0
         springConst: 60
+        returnForce: 5.0
+        
         
   defaults: # default settings for all wheels, can per overwritten per wheel
     steer_ctrl: # Parameters for tuning Impedance-Controller
