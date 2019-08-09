@@ -31,7 +31,7 @@ fts_adaptive_force_controller:
     y_gain: 1.0              # 1/b
     y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
     # rotational (z-dir) parameters
-    rot_min_torque: 0.1    # 0.5
+    rot_min_torque: 0.3    # 0.5
     rot_max_torque: 30.0
     rot_max_rot_vel: 1.2
     rot_gain: 1.0
@@ -43,15 +43,16 @@ fts_adaptive_force_controller:
   FTSAdaptiveForceController:
     #adapt the maximum input forces of the system
     adaptive_force:
+      use_passive_behavior_ctrlr: False         # whether to activate the passive behavior controller
       use_adaptive_force: False       # whether to use velocity-adaptive force feature
       force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
-        x: 1.5
-        y: 1.5
+        x: 1.7
+        y: 1.4
         rot: 1.0
       force_scale_max_vel:    # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
-        x: 0.35
-        y: 0.35
-        rot: 0.35
+        x: 0.5
+        y: 0.5
+        rot: 0.30
     # adapt the center of gravity
     adaptive_cog:
       adapt_cog: False  # whether to use virtual center of gravity instead of real one
@@ -59,19 +60,23 @@ fts_adaptive_force_controller:
       cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
     # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
     transition:
-      use_smooth_transition: False    # whether to use smooth transition function (adapts parameters faster with lower vel.)
-      transition_rate: 0.1            # Value between 0.05 and 1.0 (changes how fast parameter will be adapted with low vel.)
+      use_smooth_transition: True    # whether to use smooth transition function (adapts parameters faster with lower vel.)
+      transition_rate: 0.55            # Value between 0.05 and 1.0 (changes how fast parameter will be adapted with low vel.)
 
     parametrization:
       x_base:
         minForce: 70.0                # force value which is the minimum value in order to finish the first step
         springConst: 200
+        returnForce: 20.0
       y_base:
-        minForce: 70.0
+        minForce: 60.0
         springConst: 200
+        returnForce: 15.0
       rot_base:
         minTorque: 10.0
         springConst: 60
+        returnForce: 8.0
+        
         
   defaults: # default settings for all wheels, can per overwritten per wheel
     steer_ctrl: # Parameters for tuning Impedance-Controller
