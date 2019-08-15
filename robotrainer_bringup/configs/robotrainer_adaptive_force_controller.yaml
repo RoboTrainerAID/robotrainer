@@ -56,7 +56,7 @@ fts_adaptive_force_controller:
     # adapt the center of gravity
     adaptive_cog:
       adapt_cog: False  # whether to use virtual center of gravity instead of real one
-      cog_x: 0.1    # distance in negative x-direction (towards user) from real center of gravity to virtual one
+      cog_x: 0.5    # distance in negative x-direction (towards user) from real center of gravity to virtual one
       cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
     # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
     transition:
