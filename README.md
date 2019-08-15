@@ -11,18 +11,16 @@ robotrainer
 ## Status and ToDos
 
 Status:
-- Modalities have not been tested yet with new parameter server structure (wheel of robot was broken). But all modalities *should* be working fine. 
-- PathTracking has untested changes (pathtracking on path sections instead of on whole path)
+- When Starting the Adaptive Force Controller, the robot can be adapted using dynamic reconfigure.
+- The corresponding parameters of the Yaml file are updated and should be ready-to-use for adaptive force feature
+- passive behavior control now works as intended (can be switched on and off using dynamic reconfigure)
 
 ToDos:
-- integrate `<robotrainer>/yamls/modalities_chain.yaml` into launchfile. Currently, this needs to be loaded manually on startup (see instructions below)
-- integrate package `robotrainer_bringup` (launchfiles) into robotrainer package
+- Add testcase to determine center of rotation adaption
+- Enable adaptive force by default using yaml parameters (instead of switching on/off in dynamic reconfigure)
+- delete test parameters in dynamic reconfigure and port them to yaml parameters instead
 
 ## Dependencies and build problems
-
-The workspace on SR2 requires this package and the the package `iirob_controllers` on branch `fts_with_modalities_chain` in order to work properly.
-
-When building, the package `force_controllers` might fail. Do `catkin clean -y && catkin b -c` (->fail) then do `source devel/setup.bash && catkin b -c`. Repeat last step one more time if it still fails. Then there should be no errors left.
 
 
 ## Starting robotrainer with demo scenario
