@@ -1,0 +1,81 @@
+integral_compare_controller:
+  use_fts: true
+  type: robotrainer_controllers/IntegralCompareCtrl
+  required_drive_mode: 3
+  publish_rate: 50
+  max_rot_velocity: 1.0 #0.2
+  max_trans_velocity: 1.5 #0.2
+  FTSBaseController:
+    simulate: True
+    update_rate: 200.0
+    # trigger inversion of y and rotation outputs
+    y_reversed: False
+    rot_reversed: False
+    # scale for negative x-direction
+    backwards_max_force_scale: 0.5
+    backwards_max_vel_scale: 0.7 #0.25
+    # trigger using controllers
+    x_force_controller: True
+    y_force_controller: True
+    rot_controller: True
+    # x-direction parameters
+    x_min_force: 3.0        # 5.0
+    x_max_force: 100.0
+    x_max_vel: 1.2
+    x_gain: 1.0               # 1/b
+    x_time_const: 0.5        # m/b   # 1/(2*pi*Fl)  
+    # y-direction parameters
+    y_min_force: 3.0        # 5.0
+    y_max_force: 100.0
+    y_max_vel: 1.2
+    y_gain: 1.0              # 1/b
+    y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
+    # rotational (z-dir) parameters
+    rot_min_torque: 0.1    # 0.5
+    rot_max_torque: 40.0
+    rot_max_rot_vel: 1.2
+    rot_gain: 1.0
+    rot_time_const: 0.5
+  IntegralCompareCtrlr:
+    #window_size: 1024
+    use_raw_integral: False
+    use_std_integral: False
+    use_chury_integral: False
+    use_sliding_integral: False
+    use_reset_sliding: False
+    sliding_integral_window_size: 512
+    use_sliding_integral_linearWeight: False
+    use_reset_sliding_linearWeight: False
+    sliding_integral_linearWeight_window_size: 512
+    #multidimensional
+    use_raw_integral_3d: False
+    use_std_integral_3d: False
+    use_chury_integral_3d: False
+    use_sliding_integral_3d: False 
+    use_reset_sliding_3d: False
+    sliding_integral_3d_window_size: 512
+    use_sliding_integral_linearWeight_3d: False
+    use_reset_sliding_linearWeight_3d: False
+    sliding_integral_linearWeight3d_window_size: 512
+  defaults: # default settings for all wheels, can per overwritten per wheel
+    steer_ctrl: # Parameters for tuning Impedance-Controller
+      spring: 15.0
+      damp: 2.75
+      virt_mass: 0.1 
+      d_phi_max: 12.0
+      dd_phi_max: 40.0
+
+  wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
+    - steer: fl_caster_rotation_joint
+      drive: fl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: bl_caster_rotation_joint
+      drive: bl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: br_caster_rotation_joint
+      drive: br_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: fr_caster_rotation_joint
+      drive: fr_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+
