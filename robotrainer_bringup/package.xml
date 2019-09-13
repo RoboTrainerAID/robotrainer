@@ -21,9 +21,9 @@
   <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
 
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>sr2_bringup</depend>
-  <depend>robotrainer_modalities</depend>
-  <depend>robotrainer_editor</depend>
+  <exec_depend>sr2_bringup</exec_depend>
+  <exec_depend>robotrainer_modalities</exec_depend>
+  <exec_depend>robotrainer_panel</exec_depend>
   <test_depend>roslaunch</test_depend>
 
 </package>
