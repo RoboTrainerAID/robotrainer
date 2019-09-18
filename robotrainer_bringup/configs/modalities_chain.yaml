@@ -9,6 +9,9 @@ robotrainer: #Common namespace for all robotrainer related params
     - name: forces_modalitiy
       type: robotrainer_modalities/VirtualForcesFilter
       params: {}
+    - name: counterforce_modalitiy
+      type: robotrainer_modalities/VirtualCounterforceFilter
+      params: {}
     - name: walls_modality
       type: robotrainer_modalities/VirtualWallsFilter
       params: {}
