@@ -40,6 +40,7 @@
         <remap from="/base/robotrainer_controllers/input_wrench_for_led" to="/rosy_test/leds_rectangle/led_force"/>
         
         <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch" >
+        </include>
         
 </launch>
 
