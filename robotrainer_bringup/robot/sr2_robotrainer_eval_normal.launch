@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+        
+<!--         <arg name="not_all" default="true"/> -->
+        
+        <include file="$(find robotrainer_bringup)/robot/sr2_robotrainer.launch" >
+                <arg name="robotrainer_controller_yaml" value="$(find robotrainer_bringup)/configs/robotrainer_adaptive_force_controller.yaml"/>
+                <arg name="robotrainer_controller" value="fts_adaptive_force_controller"/>
+		<arg name="robot_env" value="iar-vicon-labor" />
+<!--                 <arg name="not_all" value="$(arg not_all)"/> -->
+        </include>
+        
+        <remap from="/base/robotrainer_controllers/input_wrench_for_led" to="/rosy_test/leds_rectangle/led_force"/>
+        
+        <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch" >
+        </include>
+        
+</launch>
+
+
