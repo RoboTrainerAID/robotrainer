@@ -18,7 +18,7 @@
                 <rosparam command="load" file="$(arg robotrainer_controller_yaml)"/>
         </group>
         
-        <include file="$(find robotrainer_bringup)/robot/sr2.launch" >
+        <include file="$(find sr2_bringup)/robot/sr2.launch" >
                 <arg name="robot_env" value="$(arg robot_env)"/>
                 <arg name="navigation" value="true"/>
                 <arg name="driver_yaml" value="$(arg driver_yaml)"/>
@@ -32,6 +32,7 @@
         <group ns="base">
                 <node pkg="controller_manager" type="controller_manager" name="base_controller_loader" args="load $(arg controllers_to_load)" respawn="false" output="screen"/>
         </group>
+        
         
         
         <rosparam command="load" file="$(find robotrainer_bringup)/configs/modalities_chain.yaml" />
