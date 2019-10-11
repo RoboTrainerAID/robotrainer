@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+    <!-- args -->
+    <arg name="sim" default="false"/>
+    <arg name="robot" value="raw3-5"/>
+    <arg name="pc1" default="localhost"/>
+    <arg name="env-script" default="$(find cob_bringup)/env.sh"/>
+    <arg name="pkg_hardware_config" default="$(find cob_hardware_config)"/>
+    <arg name="driver_yaml" default="$(arg pkg_hardware_config)/robots/raw3/config/raw3_base_driver.yaml"/>
+    <arg name="canopen_driver_yaml" default="$(arg pkg_hardware_config)/robots/$(arg robot)/config/base_driver.yaml"/>
+    <arg name="controller_yaml" default="$(arg pkg_hardware_config)/robots/raw3/config/raw3_base_controller.yaml"/>
+    <!--<arg name="robot_env" default="$(optenv ROBOT_ENV ipr-roboterhalle)"/>-->
+    <arg name="unload_default_controller" default="false"/>
+    <arg name="base_controllers_to_spawn" default="joint_state_controller odometry_controller twist_controller"/>
+
+    <!-- SOFTWARE COMPONENTS -->
+    <arg name="mapping" default="false"/>
+    <arg name="navigation" default="false"/>
+
+    <!-- HARDWARE COMPONENTS -->
+    <arg name="neck" default="false"/>
+    <arg name="neck_camera" default="false"/>
+    <arg name="fts" default="false"/>
+    <arg name="fts_sim" default="false"/>
+    <arg name="sick_visionary_t" default="false"/>
+
+    <!-- simulations parameter -->
+    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-roboterhalle)"/>
+    <arg name="pkg_env_config" default="$(find cob_default_env_config)"/>
+    <arg name="pkg_gazebo_worlds" default="$(find cob_gazebo_worlds)"/>
+    <arg name="world_name" default="worlds/empty.world"/>
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="initial_config" default=""/>
+    
+    <!-- SCENARIO -->
+<!--     <arg name="object_tracking" default="false"/> -->
+
+    <!-- send raw urdf to param server -->
+    <arg name="scenario_parameters" value="sim:=$(arg sim) neck:=$(arg neck) fts:=$(arg fts) fts_sim:=$(arg fts_sim) sick_visionary_t:=$(arg sick_visionary_t) neck_camera:=$(arg neck_camera)" />
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find sr2_bringup)/urdf/sr2.urdf.xacro' $(arg scenario_parameters)"/>
+
+    <!-- startup simulated world -->
+    <include file="$(find cob_gazebo_worlds)/launch/world.launch" if="$(arg sim)">
+		<arg name="robot_env" value="ipa-apartment" />
+		<arg name="pkg_env_config" value="$(arg pkg_env_config)" />
+		<arg name="pkg_gazebo_worlds" value="$(arg pkg_gazebo_worlds)" />
+		<arg name="world_name" value="$(arg world_name)"/>
+		<arg name="paused" value="$(arg paused)" />
+		<arg name="use_sim_time" value="$(arg use_sim_time)" />
+		<arg name="gui" value="$(arg gui)" />
+    </include>
+
+    <!-- upload default configuration parameters -->
+    <include file="$(find cob_default_robot_config)/upload_param.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+
+    <group>
+        <machine name="pc1" address="$(arg pc1)" env-loader="$(arg env-script)" default="true" timeout="30"/>
+
+        <!-- start hardware -->
+        <group unless="$(arg sim)">
+            <include file="$(find cob_bringup)/tools/pc_monitor.launch">
+                <arg name="robot" value="$(arg robot)"/>
+                <arg name="pc" value="$(arg pc1)"/>
+            </include>
+            <include file="$(find cob_bringup)/drivers/phidgets.launch">
+                <arg name="robot" value="$(arg robot)"/>
+            </include>
+        </group>
+
+        <include file="$(find cob_bringup)/drivers/sick_lms1xx.launch">
+            <arg name="robot" value="$(arg robot)"/>
+            <arg name="name" value="base_laser_front"/>
+            <arg name="sim" value="$(arg sim)"/>
+        </include>
+        <include file="$(find cob_bringup)/drivers/sick_lms1xx.launch">
+            <arg name="robot" value="$(arg robot)"/>
+            <arg name="name" value="base_laser_rear"/>
+            <arg name="sim" value="$(arg sim)"/>
+        </include>
+
+        <include file="$(find cob_bringup)/drivers/scan_unifier.launch" >
+            <arg name="robot" value="$(arg robot)" />
+            <arg name="input_scans" value="['/base_laser_front/scan','/base_laser_rear/scan']"/>
+            <arg name="output_scan" value="/scan_unified"/>
+        </include>
+
+        <include file="$(find cob_bringup)/tools/emergency_stop_monitor.launch" >
+            <arg name="robot" value="$(arg robot)" />
+        </include>
+        <include file="$(find cob_bringup)/drivers/battery_voltage.launch" >
+            <arg name="robot" value="$(arg robot)" />
+        </include>
+        <!-- problems when using battery_filter
+        <include file="$(find cob_bringup)/drivers/battery_voltage_filter.launch" >
+            <arg name="robot" value="$(arg robot)" />
+        </include>
+        -->
+        <include file="$(find cob_bringup)/tools/battery_monitor.launch" >
+            <arg name="robot" value="$(arg robot)" />
+        </include>
+        <include file="$(find cob_bringup)/components/raw3_base.launch">
+            <arg name="robot" value="$(arg robot)" />
+            <arg name="can_device" value="can2" />
+            <arg name="sim" value="$(arg sim)"/>
+            <arg name="driver_yaml" value="$(arg driver_yaml)" />
+            <arg name="canopen_driver_yaml" value="$(arg canopen_driver_yaml)"/>
+            <arg name="controller_yaml" value="$(arg controller_yaml)"/>
+            <arg name="base_controllers_to_spawn" value="$(arg base_controllers_to_spawn)"/>
+        </include>
+        <!--
+        <group ns="base" if="$(arg unload_default_controller)">
+            <node pkg="controller_manager" type="controller_manager" name="base_controller_unloader" args="unload twist_controller" respawn="false" output="screen"/>
+        </group>
+        -->
+        <!-- TODO: Why?? -->
+        <!-- overwrite control parameters with non-default values -->
+        <rosparam ns="base" command="load" file="$(find cob_hardware_config)/robots/$(arg robot)/config/base_controller.yaml"/>
+
+        <!-- start additional packages -->
+        <include file="$(find cob_bringup)/tools/diagnostics_aggregator.launch" >
+            <arg name="robot" value="$(arg robot)" />
+        </include>
+
+        <include file="$(find cob_bringup)/tools/teleop.launch">
+            <arg name="robot" value="$(arg robot)"/>
+        </include>
+        <remap from="/cmd_vel" to="/cmd_force"/>
+        
+<!--        <include file="$(find cob_bringup)/tools/base_collision_observer.launch">
+            <arg name="robot" value="$(arg robot)"/>
+        </include>-->
+        <include file="$(find cob_bringup)/tools/robot_state_publisher.launch">
+            <arg name="robot" value="$(arg robot)"/>
+        </include>
+        <include file="$(find cob_script_server)/launch/script_server.launch"/>
+
+        <!-- simulation only -->
+        <include if="$(arg sim)" file="$(find cob_bringup)/tools/fake_diagnostics.launch">
+            <arg name="fake_diagnostics" value="'base_laser_front, base_laser_rear, -pc1, joy'"/>
+        </include>
+
+        <!-- push robot_description to factory and spawn robot in gazebo -->
+        <node if="$(arg sim)" name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model robot -z 0.1 $(arg initial_config)" respawn="false" output="screen" />
+
+        <!-- SOFTWARE COMPONENTS -->
+        <include if="$(arg mapping)" file="$(find cob_mapping_slam)/launch/2dslam.launch">
+            <arg name="unified_laser_scan" value="true"/>
+        </include>
+        <include if="$(arg navigation)" file="$(find cob_navigation_global)/launch/2dnav_ros_eband.launch">
+        <arg name="robot" value="raw3-5"/>
+        <arg name="robot_env" value="$(arg robot_env)"/>
+        </include>
+
+        <!-- HARDWARE COMPONENTS -->
+        <include ns="rosy_test" file="$(find iirob_led)/launch/iirob_led_rectangle.launch" unless="$(arg sim)">
+            <arg name="pub_transform" value="false"/>
+        <arg name="port" value="/dev/ttyUSB1" />
+        </include>
+        <!--<remap from="/leds_rectangle/led_force" to="/base/threshold_filtered"/>-->
+
+        <include file="$(find sr2_bringup)/components/neck.launch" if="$(arg neck)">
+        <arg name="camera" value="$(arg neck_camera)"/>
+        </include>
+        <include file="$(find sr2_bringup)/components/fts.launch"  if="$(arg fts)">
+        <arg name="sim" value="$(arg sim)"/>
+        </include>
+        <include file="$(find sr2_bringup)/components/sick_visionary_t.launch"  if="$(arg sick_visionary_t)">
+        </include>
+
+    </group>
+
+</launch>

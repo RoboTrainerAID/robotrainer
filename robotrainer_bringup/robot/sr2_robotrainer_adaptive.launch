@@ -18,7 +18,7 @@
                 <rosparam command="load" file="$(arg robotrainer_controller_yaml)"/>
         </group>
         
-        <include file="$(find sr2_bringup)/robot/sr2.launch" >
+        <include file="$(find robotrainer_bringup)/robot/sr2.launch" >
                 <arg name="robot_env" value="$(arg robot_env)"/>
                 <arg name="navigation" value="true"/>
                 <arg name="driver_yaml" value="$(arg driver_yaml)"/>
@@ -36,8 +36,6 @@
         
         <rosparam command="load" file="$(find robotrainer_bringup)/configs/modalities_chain.yaml" />
         <rosparam command="load" file="$(arg robotrainer_modalities_yaml)" />
-        
-        <remap from="/base/robotrainer_controllers/input_wrench_for_led" to="/rosy_test/leds_rectangle/led_force"/>
         
         <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch" >
         </include>
