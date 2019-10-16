@@ -36,6 +36,19 @@ fts_adaptive_force_controller:
     rot_max_rot_vel: 1.2
     rot_gain: 1.0
     rot_time_const: 0.5
+    #parameters for global control actions come hereafter
+    global_control_actions:
+      # adapt the center of gravity
+      adaptive_cog:
+        adapt_cog: False  # whether to use virtual center of gravity instead of real one
+        cog_x: 0.5    # distance in negative x-direction (towards user) from real center of gravity to virtual one
+        cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
+      # enable and parametrize global counterforce
+      global_counterforce:
+        enabled: False # whether the global counterforce is enabled by default or not
+        counterforce_x: 20.0 # value in Newton which acts as a counterforce in the stated dimension. Valid range: [0.0N - 70.0N]
+        counterforce_y: 0.0 # value in Newton which acts as a counterforce in the stated dimension. Valid range: [0.0N - 25.0N]
+        countertorque_z: 0.0 # value in Newton which acts as a countertorque in the stated dimension. Valid range: [0.0N - 8.0N]
 
   # parameters for Adaptive FTS controller are to be defined here:
   # force_scale values are meant as multiplicative values of maxForce defined in FTSBaseController. 
@@ -53,11 +66,6 @@ fts_adaptive_force_controller:
         x: 0.5
         y: 0.5
         rot: 0.30
-    # adapt the center of gravity
-    adaptive_cog:
-      adapt_cog: False  # whether to use virtual center of gravity instead of real one
-      cog_x: 0.5    # distance in negative x-direction (towards user) from real center of gravity to virtual one
-      cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
     # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
     transition:
       use_smooth_transition: True    # whether to use smooth transition function (adapts parameters faster with lower vel.)
