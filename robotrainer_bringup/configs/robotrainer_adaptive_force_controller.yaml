@@ -1,0 +1,109 @@
+fts_adaptive_force_controller:
+  use_fts: true
+  type: robotrainer_controllers/FTSAdaptiveForceController
+  required_drive_mode: 3
+  publish_rate: 50
+  max_rot_velocity: 1.0 #0.2
+  max_trans_velocity: 1.5 #0.2
+  FTSBaseController:
+    simulate: False
+    update_rate: 200.0
+    # trigger inversion of y and rotation outputs
+    y_reversed: False
+    rot_reversed: False
+    # scale for negative x-direction
+    backwards_max_force_scale: 0.5
+    backwards_max_vel_scale: 0.7 #0.25
+    # trigger using controllers
+    x_force_controller: True
+    y_force_controller: True
+    rot_controller: True
+    # x-direction parameters
+    x_min_force: 3.0        # 5.0
+    x_max_force: 100.0
+    x_max_vel: 1.2
+    x_gain: 1.0               # 1/b
+    x_time_const: 0.5        # m/b   # 1/(2*pi*Fl)  
+    # y-direction parameters
+    y_min_force: 3.0        # 5.0
+    y_max_force: 100.0
+    y_max_vel: 1.2
+    y_gain: 1.0              # 1/b
+    y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
+    # rotational (z-dir) parameters
+    rot_min_torque: 0.3    # 0.5
+    rot_max_torque: 30.0
+    rot_max_rot_vel: 1.2
+    rot_gain: 1.0
+    rot_time_const: 0.5
+    #parameters for global control actions come hereafter
+    global_control_actions:
+      # adapt the center of gravity
+      adaptive_cog:
+        adapt_cog: False  # whether to use virtual center of gravity instead of real one
+        cog_x: 0.5    # distance in negative x-direction (towards user) from real center of gravity to virtual one
+        cog_y: 0.0    # distance in y-direction from real center of gravity to virtual one
+      # enable and parametrize global counterforce
+      global_counterforce:
+        enabled: False # whether the global counterforce is enabled by default or not
+        counterforce_x: 20.0 # value in Newton which acts as a counterforce in the stated dimension. Valid range: [0.0N - 70.0N]
+        counterforce_y: 0.0 # value in Newton which acts as a counterforce in the stated dimension. Valid range: [0.0N - 25.0N]
+        countertorque_z: 0.0 # value in Newton which acts as a countertorque in the stated dimension. Valid range: [0.0N - 8.0N]
+
+  # parameters for Adaptive FTS controller are to be defined here:
+  # force_scale values are meant as multiplicative values of maxForce defined in FTSBaseController. 
+  # Maximum or minimum values for these fields are defined in the comments 
+  FTSAdaptiveForceController:
+    #adapt the maximum input forces of the system
+    adaptive_force:
+      use_passive_behavior_ctrlr: False         # whether to activate the passive behavior controller
+      use_adaptive_force: False       # whether to use velocity-adaptive force feature
+      force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
+        x: 1.7
+        y: 1.4
+        rot: 1.0
+      force_scale_max_vel:    # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
+        x: 0.5
+        y: 0.5
+        rot: 0.30
+    # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
+    transition:
+      use_smooth_transition: True    # whether to use smooth transition function (adapts parameters faster with lower vel.)
+      transition_rate: 0.55            # Value between 0.05 and 1.0 (changes how fast parameter will be adapted with low vel.)
+
+    parametrization:
+      x_base:
+        minForce: 40.0                # force value which is the minimum value in order to finish the first step
+        springConst: 200
+        returnForce: 20.0
+      y_base:
+        minForce: 40.0
+        springConst: 150
+        returnForce: 15.0
+      rot_base:
+        minTorque: 10.0
+        springConst: 60
+        returnForce: 8.0
+        
+        
+  defaults: # default settings for all wheels, can per overwritten per wheel
+    steer_ctrl: # Parameters for tuning Impedance-Controller
+      spring: 15.0
+      damp: 2.75
+      virt_mass: 0.1 
+      d_phi_max: 12.0
+      dd_phi_max: 40.0
+
+  wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
+    - steer: fl_caster_rotation_joint
+      drive: fl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: bl_caster_rotation_joint
+      drive: bl_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: br_caster_rotation_joint
+      drive: br_caster_r_wheel_joint
+      steer_neutral_position: 180.0
+    - steer: fr_caster_rotation_joint
+      drive: fr_caster_r_wheel_joint
+      steer_neutral_position: 180.0

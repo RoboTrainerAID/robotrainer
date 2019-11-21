@@ -1,7 +1,9 @@
-path_tracking: {controller_update_rate: 100.0, max_force: 120.0, max_velocity: 1.2,
+path_tracking: {controller_update_rate: 200.0, max_force: 100.0, max_velocity: 1.2,
   time_const_T: 0.8}
 virtual_forces: {compensate_velocity: false, compensation_reference_velocity: 0.3,
-  controller_update_rate: 100.0, max_force: 120.0, max_velocity: 0.8, time_const_T: 0.75,
+  controller_update_rate: 200.0, max_force: 100.0, max_velocity: 1.2, time_const_T: 0.75,
   trapezoid_max_at_percent_radius: 0.25}
-virtual_walls: {controller_update_rate: 100.0, max_force: 180.0, max_velocity: 1.2,
-  time_const_T: 0.8, trapezoid_max_at_percent_radius: 0.25, wall_force: 165.0}
+virtual_counterforce: {controller_update_rate: 200.0, max_force: 100.0, max_velocity: 1.2, time_const_T: 0.75,
+  trapezoid_max_at_percent_radius: 0.25}
+virtual_walls: {controller_update_rate: 200.0, max_force: 120.0, max_velocity: 1.2,
+  time_const_T: 0.8, trapezoid_max_at_percent_radius: 0.25, wall_force: 100.0}
