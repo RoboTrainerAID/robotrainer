@@ -1,0 +1,3 @@
+uri: "opc.tcp://141.3.80.80:18801/ROSServer"
+
+namespace: '/rosylernt/robotrainer'

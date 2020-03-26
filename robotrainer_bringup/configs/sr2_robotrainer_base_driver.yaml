@@ -1,3 +1,5 @@
+use_fts: true
+
 sync:
   interval_ms: 5
   overflow: 0
@@ -5,7 +7,6 @@ heartbeat:
   rate: 20
   msg: "77f#05"
 
-use_fts: true
   
 defaults:
   eds_pkg: cob_hardware_config

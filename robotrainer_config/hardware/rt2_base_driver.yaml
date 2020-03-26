@@ -1,5 +1,5 @@
 sync:
-  interval_ms: 20 #TODO: Change this to 5
+  interval_ms: 20
   overflow: 0
 heartbeat:
   rate: 20
@@ -51,4 +51,3 @@ nodes:
   br_caster_r_wheel_joint:
     <<: *drive_wheel
     id: 6
-

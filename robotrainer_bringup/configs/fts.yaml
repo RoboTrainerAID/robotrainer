@@ -1,0 +1,33 @@
+HWComm:
+    type: 5           # CANITFTYPE_SOCKET_CAN
+    path: can1
+
+FTS:
+    base_identifier: 0x20
+    auto_init: true
+    fts_name: "ATI_45_Mini"
+
+Node:
+    sim: false
+    ft_pub_freq: 200
+    ft_pull_freq: 800
+    sensor_frame: "fts_reference_link"
+    transform_frame: "base_link"
+    static_application: true
+    sensor_hw: "ati_force_torque/ATIForceTorqueSensorHWCan"
+
+Calibration:
+    Offset:
+        n_measurements: 200
+        T_between_meas: 0.01
+        isStatic: false # true= use static offset Calibration, false=use calibrate Sensor to 0 in current State
+
+Publish:
+    sensor_data: true
+    low_pass: false
+    moving_mean: false
+    transformed_data: true
+    gravity_compensated: false
+    threshold_filtered: true
+    output_data: true
+

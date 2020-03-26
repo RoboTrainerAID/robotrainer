@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot" value="robotrainer2"/>
+    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-robotrainer)"/>
+    <arg name="RT2_ip" default="localhost"/>
+    <arg name="RT2_ip_wired" default="10.20.20.1"/>
+    <arg name="sim" default="false"/>
+    <arg name="fts_sim" default="false"/>
+
+    <arg name="pkg_hardware_config" default="$(find robotrainer_config)"/>
+    <arg name="pkg_env_config" default="$(find cob_default_env_config)"/>
+
+<!--     <arg name="base_config_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_base_configuration.yaml"/> -->
+    <arg name="driver_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_base_driver.yaml"/>
+    <arg name="canopen_driver_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_offsets.yaml"/>
+    <arg name="base_controller_yaml" default="$(arg pkg_hardware_config)/hardware/sr3_base_controller.yaml"/>
+
+<!--     <arg name="sr3_controller_yaml" default="$(arg base_controller_yaml)"/> -->
+    <arg name="sr3_controller" default="twist_controller"/>
+    <arg name="base_controllers_to_spawn" default="joint_state_controller odometry_controller $(arg sr3_controller)"/>
+    <arg name="controllers_to_load" default=""/>
+
+    <!-- SOFTWARE COMPONENTS -->
+    <arg name="mapping" default="false"/>
+    <arg name="navigation" default="false"/>
+
+
+    <!-- START LAUNCH STUFF -->
+    <!-- upload robot description -->
+    <include file="$(find cob_hardware_config)/upload_robot.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+    <!-- upload default configuration parameters -->
+	<include file="$(find cob_default_robot_config)/upload_param.launch">
+		<arg name="robot" value="$(arg robot)"/>
+	</include>
+
+    <!-- upload robot config for controllers -->
+    <!-- RoboTrainer config uploads -->
+<!--    <group ns="base">
+        <rosparam command="load" file="$(arg base_config_yaml)"/>
+        <rosparam command="load" file="$(arg sr3_controller_yaml)"/>
+    </group>-->
+
+
+<!--     <machine name="$(anon RT2)" address="$(arg RT2_ip)" env-loader="$(arg env-script)" default="true" timeout="30"/> -->
+
+    <!-- This actually does not do anything?? -->
+<!--    <include file="$(find cob_bringup)/tools/pc_monitor.launch">
+        <arg name="robot" value="$(arg robot)"/>
+        <arg name="pc" value="$(arg RT2_ip)"/>
+        <arg name="enable_ntp_monitoring" value="false"/>
+    </include>-->
+
+    <include file="$(find cob_bringup)/components/ros_control_base.launch">
+        <arg name="robot" value="$(arg robot)"/>
+        <arg name="driver_yaml" value="$(arg driver_yaml)"/>
+        <arg name="canopen_driver_yaml" value="$(arg canopen_driver_yaml)"/>
+        <arg name="controller_yaml" value="$(arg base_controller_yaml)" />
+
+        <arg name="can_device" value="can0"/>
+
+        <arg name="sim" value="$(arg sim)"/>
+        <!-- TODO: can this remove restart when NOt-Aus? -->
+<!--         <arg name="reset_errors_before_recover" default="false"/> -->
+
+        <arg name="base_controllers_to_spawn" value="$(arg base_controllers_to_spawn)"/>
+
+        <!-- FIXME: no need to move this? -->
+       <arg name="velocity_smoother_config_file" value="$(arg pkg_hardware_config)/hardware/velocity_smoother.yaml"/>
+<!--        <arg name="twist_mux_config_locks" value="$(arg pkg_hardware_config)/hardware/twist_mux_locks.yaml"/>
+        <arg name="twist_mux_config_topics" value="$(arg pkg_hardware_config)/hardware/twist_mux_topics.yaml"/>-->
+    </include>
+    <group ns="base">
+        <node pkg="controller_manager" type="controller_manager" name="base_controller_loader" args="load $(arg controllers_to_load)" respawn="false" output="screen"/>
+    </group>
+
+
+    <!-- start common nodes used in hardware and simulation -->
+    <include file="$(find cob_bringup)/tools/diagnostics_aggregator.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+    <include file="$(find cob_bringup)/tools/teleop.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+    <include file="$(find cob_bringup)/tools/robot_state_publisher.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+
+    <include file="$(find cob_script_server)/launch/script_server.launch"/>
+
+    <!-- Laser Scanners -->
+    <node ns="base_laser_left" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_left" output="screen">
+        <param name="host_ip" value="$(arg RT2_ip_wired)"/>
+        <param name="sensor_ip" value="10.20.20.11"/>
+        <param name="frame_id" value="base_laser_left_link"/>
+    </node>
+
+    <node ns="base_laser_right" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_right" output="screen">
+        <param name="host_ip" value="$(arg RT2_ip_wired)"/>
+        <param name="sensor_ip" value="10.20.20.12"/>
+        <param name="frame_id" value="base_laser_right_link"/>
+    </node>
+
+    <!-- run scan unifier -->
+	<node pkg="cob_scan_unifier" type="scan_unifier_node" name="scan_unifier" output="log">
+		<rosparam subst_value="True" param="input_scans">['/base_laser_left/scan', '/base_laser_right/scan']</rosparam>
+		<remap from="scan_unified" to="/scan_unified"/>
+	</node>
+
+    <!-- SOFTWARE COMPONENTS -->
+	<include if="$(arg mapping)" file="$(find cob_mapping_slam)/launch/2dslam.launch">
+          <arg name="unified_laser_scan" value="true"/>
+    </include>
+    <node unless="$(arg mapping)" name="map_server" pkg="map_server" type="map_server" args="$(arg pkg_env_config)/$(arg robot_env)/map.yaml"/>
+    <include unless="$(arg mapping)" file="$(find cob_navigation_global)/launch/amcl_node.xml" >
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+
+<!--  This doesn't work - add eband only from SR2.... -->
+<!--    <include unless="$(arg mapping)" file="$(find cob_navigation_global)/launch/2dnav_ros_eband.launch">
+  	  <arg name="robot" value="$(arg robot)"/>
+	  <arg name="robot_env" value="$(arg robot_env)"/>
+	</include>-->
+
+
+    <!--  RoboTrainer-specific stuff -->
+    <include file="$(find robotrainer_bringup)/components/fts.launch">
+      <arg name="sim" value="$(arg sim)"/>
+      <arg name="standalone" value="false" />
+    </include>
+
+    <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch">
+        <arg name="laser_scan_topic" value="/scan_unified"/>
+    </include>
+
+<!--    <include file="$(find iirob_led)/launch/iirob_led_rectange.launch">
+        <arg name="pub_transform" value="false"/>
+        <arg name="port" vlaue="/dev/ttyUSB0"/>
+    </include>-->
+
+    <include file="$(find openni2_launch)/launch/openni2.launch" >
+        <arg name="camera" value="lower_legs_camera"/>
+        <arg name="device_id" value="3@0"/>
+    </include>
+
+    <include file="$(find openni2_launch)/launch/openni2.launch" >
+        <arg name="camera" value="upper_body_camera"/>
+        <arg name="device_id" value="1@0"/>
+    </include>
+
+
+</launch>

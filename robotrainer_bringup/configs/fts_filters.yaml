@@ -1,0 +1,19 @@
+ThresholdFilter:
+  name: ThresholdFilter
+  type: iirob_filters/ThresholdFilterWrench
+  params: {linear_threshold: 2.5,  angular_threshold: 0.3}
+
+LowPassFilter:
+  name: LowPassFilter
+  type: iirob_filters/LowPassFilterWrench
+  params: {SamplingFrequency: 200.0, DampingFrequency: 15.0, DampingIntensity: -6.0}
+
+MovingMeanFilter:
+  name: MovingMeanFilter
+  type: filters/MovingMeanFilterWrench
+  params: {divider: 4}
+
+#GravityCompensation:
+  #name: GravityCompensator
+  #type: iirob_filters/GravityCompensatorWrench
+  #params: {world_frame: "base_link"}

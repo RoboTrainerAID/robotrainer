@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="sim" default="false"/>
+    <arg name="standalone" default="false" />
+
+    <group unless="$(arg standalone)">
+        <rosparam ns="base" command="load" file="$(find robotrainer_bringup)/configs/fts.yaml" unless="$(arg sim)"/>
+        <rosparam ns="base/driver" command="load" file="$(find robotrainer_bringup)/configs/fts_filters.yaml" unless="$(arg sim)"/>
+        <rosparam ns="base/Calibration/Offset" command="load" file="$(find robotrainer_bringup)/configs/fts_offset.yaml" unless="$(arg sim)" />
+    </group>
+
+    <!-- If sensor is runned standalone for testing -->
+    <group if="$(arg standalone)">
+        <rosparam ns="fts" command="load" file="$(find robotrainer_bringup)/configs/fts.yaml" unless="$(arg sim)"/>
+        <rosparam ns="fts" command="load" file="$(find robotrainer_bringup)/configs/fts_filters.yaml" unless="$(arg sim)"/>
+        <rosparam ns="fts/Calibration/Offset" command="load" file="$(find robotrainer_bringup)/configs/fts_offset.yaml" unless="$(arg sim)" />
+
+        <!-- send urdf to param server -->
+        <arg name="scenario_parameters" value="sim:=false"/>
+        <param name="sensor_description" command="$(find xacro)/xacro --inorder '$(find ati_force_torque)/description/urdf/sensor_mini58.urdf.xacro' $(arg scenario_parameters)"/>
+
+        <!-- sensor state publisher -->
+        <node ns="fts" pkg="robot_state_publisher" type="robot_state_publisher" name="sensor_state_publisher">
+            <param name="publish_frequency" type="double" value="200.0" />
+            <param name="tf_prefix" type="string" value="" />
+            <remap from="robot_description" to="sensor_description" />
+        </node>
+
+        <!-- start FTS Driver Node -->
+        <node pkg="force_torque_sensor" type="force_torque_sensor_node" name="fts" cwd="node" respawn="false" output="screen">
+        </node>
+    </group>
+
+    <include if="$(arg sim)" file="$(find teleop_twist_joy)/launch/teleop.launch">
+        <arg name="config_filepath" value="$(find ati_force_torque)/config/teleop_sim.yaml"/>
+    </include>
+
+</launch>

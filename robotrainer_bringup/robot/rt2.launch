@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-deniss-office)"/>
+
+    <arg name="sim" default="false"/>
+    <arg name="fts_sim" default="false"/>
+
+    <arg name="RT2_ip" default="141.3.80.80"/>
+
+    <arg name="robotrainer_controller" default="fts_controller"/>
+    <arg name="controllers_to_load" default="twist_controller"/>
+
+    <arg name="robotrainer_controller_yaml" default="rt2_base_controller_fast.yaml"/>
+    <arg name="robotrainer_modalities_yaml" default="modalities.yaml" />
+
+    <arg name="mapping" default="false"/>
+
+    <!-- RoboTrainer config uploads -->
+    <group ns="base">
+        <rosparam ns="driver" param="use_fts">true</rosparam>
+        <rosparam command="load" file="$(find robotrainer_bringup)/configs/$(arg robotrainer_controller_yaml)"/>
+    </group>
+    <rosparam command="load" file="$(find robotrainer_bringup)/configs/modalities_chain.yaml" />
+    <rosparam command="load" file="$(find robotrainer_bringup)/configs/$(arg robotrainer_modalities_yaml)" />
+
+    <!--  RoboTrainer-specific stuff -->
+    <include file="$(find robotrainer_bringup)/components/fts.launch">
+      <arg name="sim" value="$(arg sim)"/>
+      <arg name="standalone" value="false" />
+    </include>
+
+    <!-- Start SR3 Nodes -->
+    <include file="$(find robotrainer_bringup)/robot/sr3.launch" >
+        <arg name="robot_env" value="$(arg robot_env)"/>
+        <arg name="sim" value="$(arg sim)"/>
+        <arg name="fts_sim" value="$(arg fts_sim)"/>
+        <arg name="mapping" value="$(arg mapping)"/>
+<!--         TODO: if uncomment remove from loading here... -->
+<!--         <arg name="sr3_controller_yaml" value="$(arg robotrainer_controller_yaml)"/> -->
+        <arg name="sr3_controller" value="$(arg robotrainer_controller)"/>
+        <arg name="controllers_to_load" value="$(arg controllers_to_load)"/>
+    </include>
+
+</launch>
