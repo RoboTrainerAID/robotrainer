@@ -4,7 +4,7 @@
      <!-- RoSylerNT STUFF -->
     <!-- Start Communication Nodes -->
     <node name="rosopcua" pkg="ros_opcua_impl_python_opcua" type="ros_server.py" output="screen">
-        <rosparam command="load" file="$(find robotrainer_bringup)/configs/RoSylerNT_opcua_server.yaml"/>
+        <rosparam command="load" file="$(find robotrainer_communication)/configs/RoSylerNT_opcua_server.yaml"/>
     </node>
 
     <!-- Get published position of the platform in the map in a nice format -->
@@ -19,7 +19,7 @@
     <node ns="/rosylernt/robotrainer" name="map_relay" pkg="topic_tools" type="relay" args="/map map"/>
 
     <!-- Scenario Data -->
-    <node ns="/rosylernt/robotrainer" name="scenario_publisher" pkg="ros_opcua_impl_python_opcua" type="robotrainer_status_aggregator.py">
+    <node ns="/rosylernt/robotrainer" name="scenario_publisher" pkg="robotrainer_communication" type="robotrainer_status_aggregator.py">
         <param name="rate" value="0.1" type="double"/>
     </node>
 

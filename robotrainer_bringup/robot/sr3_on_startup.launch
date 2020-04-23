@@ -11,72 +11,6 @@
     <arg name="pkg_hardware_config" default="$(find robotrainer_config)"/>
     <arg name="pkg_env_config" default="$(find cob_default_env_config)"/>
 
-<!--     <arg name="base_config_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_base_configuration.yaml"/> -->
-    <arg name="driver_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_base_driver.yaml"/>
-    <arg name="canopen_driver_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_offsets.yaml"/>
-    <arg name="base_controller_yaml" default="$(arg pkg_hardware_config)/hardware/sr3_base_controller.yaml"/>
-
-<!--     <arg name="sr3_controller_yaml" default="$(arg base_controller_yaml)"/> -->
-    <arg name="sr3_controller" default="twist_controller"/>
-    <arg name="base_controllers_to_spawn" default="joint_state_controller odometry_controller $(arg sr3_controller)"/>
-    <arg name="controllers_to_load" default=""/>
-
-    <!-- SOFTWARE COMPONENTS -->
-    <arg name="mapping" default="false"/>
-    <arg name="navigation" default="false"/>
-
-
-    <!-- START LAUNCH STUFF -->
-    <!-- upload robot description -->
-    <include file="$(find cob_hardware_config)/upload_robot.launch">
-        <arg name="robot" value="$(arg robot)"/>
-    </include>
-    <!-- upload default configuration parameters -->
-	<include file="$(find cob_default_robot_config)/upload_param.launch">
-		<arg name="robot" value="$(arg robot)"/>
-	</include>
-
-    <!-- upload robot config for controllers -->
-    <!-- RoboTrainer config uploads -->
-<!--    <group ns="base">
-        <rosparam command="load" file="$(arg base_config_yaml)"/>
-        <rosparam command="load" file="$(arg sr3_controller_yaml)"/>
-    </group>-->
-
-
-<!--     <machine name="$(anon RT2)" address="$(arg RT2_ip)" env-loader="$(arg env-script)" default="true" timeout="30"/> -->
-
-    <!-- This actually does not do anything?? -->
-<!--    <include file="$(find cob_bringup)/tools/pc_monitor.launch">
-        <arg name="robot" value="$(arg robot)"/>
-        <arg name="pc" value="$(arg RT2_ip)"/>
-        <arg name="enable_ntp_monitoring" value="false"/>
-    </include>-->
-
-    <include file="$(find cob_bringup)/components/ros_control_base.launch">
-        <arg name="robot" value="$(arg robot)"/>
-        <arg name="driver_yaml" value="$(arg driver_yaml)"/>
-        <arg name="canopen_driver_yaml" value="$(arg canopen_driver_yaml)"/>
-        <arg name="controller_yaml" value="$(arg base_controller_yaml)" />
-
-        <arg name="can_device" value="can0"/>
-
-        <arg name="sim" value="$(arg sim)"/>
-        <!-- TODO: can this remove restart when NOt-Aus? -->
-<!--         <arg name="reset_errors_before_recover" default="false"/> -->
-
-        <arg name="base_controllers_to_spawn" value="$(arg base_controllers_to_spawn)"/>
-
-        <!-- FIXME: no need to move this? -->
-       <arg name="velocity_smoother_config_file" value="$(arg pkg_hardware_config)/hardware/velocity_smoother.yaml"/>
-<!--        <arg name="twist_mux_config_locks" value="$(arg pkg_hardware_config)/hardware/twist_mux_locks.yaml"/>
-        <arg name="twist_mux_config_topics" value="$(arg pkg_hardware_config)/hardware/twist_mux_topics.yaml"/>-->
-    </include>
-    <group ns="base">
-        <node pkg="controller_manager" type="controller_manager" name="base_controller_loader" args="load $(arg controllers_to_load)" respawn="false" output="screen"/>
-    </group>
-
-
     <!-- start common nodes used in hardware and simulation -->
     <include file="$(find cob_bringup)/tools/diagnostics_aggregator.launch">
         <arg name="robot" value="$(arg robot)"/>
@@ -101,6 +35,12 @@
         <param name="host_ip" value="$(arg RT2_ip_wired)"/>
         <param name="sensor_ip" value="10.20.20.12"/>
         <param name="frame_id" value="base_laser_right_link"/>
+    </node>
+    
+    <node ns="base_laser_back" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_right" output="screen">
+        <param name="host_ip" value="$(arg RT2_ip_wired)"/>
+        <param name="sensor_ip" value="10.20.20.13"/>
+        <param name="frame_id" value="base_laser_back_link"/>
     </node>
 
     <!-- run scan unifier -->

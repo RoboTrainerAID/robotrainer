@@ -51,7 +51,7 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>robotrainer_communication</depend>
+  <exec_depend>robotrainer_communication</exec_depend>
   <exec_depend>robotrainer_bringup</exec_depend>
   <exec_depend>robotrainer_config</exec_depend>
   <exec_depend>robotrainer_modalities</exec_depend>
