@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+    <arg name="robot" value="robotrainer2"/>
+    <arg name="RT2_ip" default="localhost"/>
+    <arg name="RT2_ip_wired" default="10.20.20.1"/>
+    <arg name="sim" default="false"/>
+
+    <include file="$(find iirob_led)/launch/iirob_led_rectangle.launch">
+        <arg name="port" value="/dev/ttyUSB0"/>
+        <arg name="led_num" value="231"/>
+        <arg name="rect_left_len" value="44" /> <!-- 0 is always front left corner, counting counter-clock weise -->
+        <arg name="rect_back_len" value="72 " />
+        <arg name="rect_right_len" value="43" />
+        <arg name="rect_front_len" value="72 " />
+    </include>
+
+    <!-- Phidgets -->
+    <include file="$(find cob_bringup)/drivers/phidgets.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+
+    <include file="$(find cob_bringup)/drivers/battery_voltage.launch" >
+        <arg name="robot" value="$(arg robot)" />
+    </include>
+<!--    <include file="$(find cob_bringup)/drivers/battery_voltage_filter.launch" >
+        <arg name="robot" value="$(arg robot)" />
+    </include>-->
+<!--    <include file="$(find cob_bringup)/tools/emergency_stop_monitor.launch" >
+        <arg name="robot" value="$(arg robot)" />
+    </include>
+    <include file="$(find cob_bringup)/tools/battery_monitor.launch" >
+        <arg name="robot" value="$(arg robot)" />
+    </include>-->
+
+</launch>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+    
+    <include file="$(find robotrainer_bringup)/robot/sr3_on_startup.launch" />
+    
+</launch>

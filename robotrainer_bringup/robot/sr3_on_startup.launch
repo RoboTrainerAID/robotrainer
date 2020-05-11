@@ -2,23 +2,15 @@
 <launch>
 
     <arg name="robot" value="robotrainer2"/>
-    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-robotrainer)"/>
     <arg name="RT2_ip" default="localhost"/>
     <arg name="RT2_ip_wired" default="10.20.20.1"/>
     <arg name="sim" default="false"/>
-    <arg name="fts_sim" default="false"/>
-
-    <arg name="pkg_hardware_config" default="$(find robotrainer_config)"/>
-    <arg name="pkg_env_config" default="$(find cob_default_env_config)"/>
 
     <!-- start common nodes used in hardware and simulation -->
     <include file="$(find cob_bringup)/tools/diagnostics_aggregator.launch">
         <arg name="robot" value="$(arg robot)"/>
     </include>
     <include file="$(find cob_bringup)/tools/teleop.launch">
-        <arg name="robot" value="$(arg robot)"/>
-    </include>
-    <include file="$(find cob_bringup)/tools/robot_state_publisher.launch">
         <arg name="robot" value="$(arg robot)"/>
     </include>
 
@@ -37,7 +29,7 @@
         <param name="frame_id" value="base_laser_right_link"/>
     </node>
     
-    <node ns="base_laser_back" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_right" output="screen">
+    <node ns="base_laser_back" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_back" output="screen">
         <param name="host_ip" value="$(arg RT2_ip_wired)"/>
         <param name="sensor_ip" value="10.20.20.13"/>
         <param name="frame_id" value="base_laser_back_link"/>
@@ -49,50 +41,10 @@
 		<remap from="scan_unified" to="/scan_unified"/>
 	</node>
 
-    <!-- SOFTWARE COMPONENTS -->
-	<include if="$(arg mapping)" file="$(find cob_mapping_slam)/launch/2dslam.launch">
-          <arg name="unified_laser_scan" value="true"/>
-    </include>
-    <node unless="$(arg mapping)" name="map_server" pkg="map_server" type="map_server" args="$(arg pkg_env_config)/$(arg robot_env)/map.yaml"/>
-    <include unless="$(arg mapping)" file="$(find cob_navigation_global)/launch/amcl_node.xml" >
-        <arg name="robot" value="$(arg robot)"/>
-    </include>
-
-<!--  This doesn't work - add eband only from SR2.... -->
-<!--    <include unless="$(arg mapping)" file="$(find cob_navigation_global)/launch/2dnav_ros_eband.launch">
-  	  <arg name="robot" value="$(arg robot)"/>
-	  <arg name="robot_env" value="$(arg robot_env)"/>
-	</include>-->
-
-
-    <!--  RoboTrainer-specific stuff -->
+     <!--  RoboTrainer-specific stuff -->
     <include file="$(find robotrainer_bringup)/components/fts.launch">
       <arg name="sim" value="$(arg sim)"/>
       <arg name="standalone" value="false" />
     </include>
-
-    <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch">
-        <arg name="laser_scan_topic" value="/scan_unified"/>
-    </include>
-
-    <include file="$(find iirob_led)/launch/iirob_led_rectangle.launch">
-        <arg name="port" value="/dev/ttyUSB0"/>
-        <arg name="led_num" value="229"/>
-        <arg name="rect_left_len" value="44" /> <!-- 0 is always front left corner, counting counter-clock weise -->
-        <arg name="rect_back_len" value="72 " />
-        <arg name="rect_right_len" value="43" />
-        <arg name="rect_front_len" value="72 " />
-    </include>
-
-    <include file="$(find openni2_launch)/launch/openni2.launch" >
-        <arg name="camera" value="lower_legs_camera"/>
-        <arg name="device_id" value="3@0"/>
-    </include>
-
-    <include file="$(find openni2_launch)/launch/openni2.launch" >
-        <arg name="camera" value="upper_body_camera"/>
-        <arg name="device_id" value="1@0"/>
-    </include>
-
 
 </launch>
