@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-deniss-office)"/>
+    <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-robotrainer-v2)"/>
 
     <arg name="sim" default="false"/>
     <arg name="fts_sim" default="false"/>
@@ -11,10 +11,12 @@
     <arg name="robotrainer_controller" default="fts_controller"/>
     <arg name="controllers_to_load" default="twist_controller"/>
 
-    <arg name="robotrainer_controller_yaml" default="rt2_base_controller_fast.yaml"/>
+    <arg name="robotrainer_controller_yaml" default="rt2_base_controller.yaml"/>
     <arg name="robotrainer_modalities_yaml" default="modalities.yaml" />
 
     <arg name="mapping" default="false"/>
+    
+    <arg name="enable_leg_tracking" default="true"/>
 
     <!-- RoboTrainer config uploads -->
     <group ns="base">
@@ -41,5 +43,12 @@
         <arg name="sr3_controller" value="$(arg robotrainer_controller)"/>
         <arg name="controllers_to_load" value="$(arg controllers_to_load)"/>
     </include>
+    
+    <!--  RoboTrainer-specific stuff -->
+    <group if="$(arg enable_leg_tracking)">
+        <include file="$(find leg_tracker)/launch/leg_tracker_one_person.launch">
+            <arg name="laser_scan_topic" value="/base_laser_back/scan"/>
+        </include>
+    </group>
 
 </launch>

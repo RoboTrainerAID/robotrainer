@@ -6,6 +6,29 @@
     <arg name="RT2_ip_wired" default="10.20.20.1"/>
     <arg name="sim" default="false"/>
 
+    <arg name="pkg_hardware_config" default="$(find robotrainer_config)"/>
+
+    <arg name="base_wheel_config_yaml" default="$(arg pkg_hardware_config)/hardware/rt2_base_wheel_configuration.yaml"/>
+
+    <!-- RoboTrainer config uploads -->
+    <group ns="base">
+        <rosparam command="load" file="$(arg base_wheel_config_yaml)"/>
+    </group>
+
+
+    <!-- upload robot description -->
+    <include file="$(find cob_hardware_config)/upload_robot.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+    <!-- upload default configuration parameters -->
+	<include file="$(find cob_default_robot_config)/upload_param.launch">
+		<arg name="robot" value="$(arg robot)"/>
+	</include>
+
+    <include file="$(find cob_bringup)/tools/robot_state_publisher.launch">
+        <arg name="robot" value="$(arg robot)"/>
+    </include>
+
     <!-- start common nodes used in hardware and simulation -->
     <include file="$(find cob_bringup)/tools/diagnostics_aggregator.launch">
         <arg name="robot" value="$(arg robot)"/>
@@ -37,7 +60,7 @@
 
     <!-- run scan unifier -->
 	<node pkg="cob_scan_unifier" type="scan_unifier_node" name="scan_unifier" output="log">
-		<rosparam subst_value="True" param="input_scans">['/base_laser_left/scan', '/base_laser_right/scan']</rosparam>
+		<rosparam subst_value="True" param="input_scans">['/base_laser_left/scan', '/base_laser_right/scan', '/base_laser_back/scan']</rosparam>
 		<remap from="scan_unified" to="/scan_unified"/>
 	</node>
 
@@ -46,5 +69,10 @@
       <arg name="sim" value="$(arg sim)"/>
       <arg name="standalone" value="false" />
     </include>
+
+    <node ns="robotrainer_hw" name="robotrainer_state_publisher" pkg="robotrainer_controllers" type="robotrainer_rear_wheels_state_publisher.py">
+        <param name="frequency" value="1"/>
+        <remap from="joint_states" to="/robotrainer_hw/joint_states"/>
+    </node>
 
 </launch>

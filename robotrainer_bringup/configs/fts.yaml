@@ -23,7 +23,7 @@ Calibration:
         isStatic: false # true= use static offset Calibration, false=use calibrate Sensor to 0 in current State
 
 Publish:
-    sensor_data: true
+    sensor_data: false
     low_pass: false
     moving_mean: false
     transformed_data: true

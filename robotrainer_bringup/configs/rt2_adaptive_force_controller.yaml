@@ -1,31 +1,3 @@
-## joint_names
-joint_names: [f_caster_rotation_joint, f_caster_r_wheel_joint, bl_caster_rotation_joint, bl_caster_r_wheel_joint, br_caster_rotation_joint, br_caster_r_wheel_joint]
-
-defaults: &drive_defaults # default settings for all wheels, can per overwritten per wheel
-  steer_ctrl: # Parameters for tuning Impedance-Controller
-    spring: 15.0
-    damp: 2.75
-    virt_mass: 0.1
-    d_phi_max: 10.0
-    dd_phi_max: 40.0
-
-wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
-  - steer: f_caster_rotation_joint
-    drive: f_caster_r_wheel_joint
-    wheel_radius: 0.0782
-  - steer: bl_caster_rotation_joint
-    drive: bl_caster_r_wheel_joint
-    steer_neutral_position: -180.0
-    wheel_radius: 0.0782
-    x_pos: -0.219122
-    y_pos: 0.247322
-  - steer: br_caster_rotation_joint
-    drive: br_caster_r_wheel_joint
-    wheel_radius: 0.0782
-    x_pos: -0.219122
-    y_pos: -0.247322
-
-
 fts_adaptive_force_controller:
   use_fts: true
   type: robotrainer_controllers/FTSAdaptiveForceController
@@ -49,13 +21,13 @@ fts_adaptive_force_controller:
     # x-direction parameters
     x_min_force: 3.0        # 5.0
     x_max_force: 100.0
-    x_max_vel: 1.2
+    x_max_vel: 1.6
     x_gain: 1.0               # 1/b
     x_time_const: 0.5        # m/b   # 1/(2*pi*Fl)  
     # y-direction parameters
     y_min_force: 3.0        # 5.0
     y_max_force: 100.0
-    y_max_vel: 1.2
+    y_max_vel: 1.6
     y_gain: 1.0              # 1/b
     y_time_const: 0.5        # m/b   # 1/(2*pi*Fl)
     # rotational (z-dir) parameters
@@ -113,6 +85,3 @@ fts_adaptive_force_controller:
         springConst: 60
         returnForce: 8.0
         
-        
-  defaults: *drive_defaults
-  wheels: *wheels

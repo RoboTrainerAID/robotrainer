@@ -1,0 +1,39 @@
+## joint_names
+joint_names: [f_caster_rotation_joint, f_caster_r_wheel_joint, bl_caster_rotation_joint, bl_caster_r_wheel_joint, br_caster_rotation_joint, br_caster_r_wheel_joint]
+
+wheel_controller:
+  defaults: &drive_defaults # default settings for all wheels, can per overwritten per wheel
+    steer_ctrl: # Parameters for tuning Impedance-Controller
+      spring: 15.0
+      damp: 2.75
+      virt_mass: 0.1
+      d_phi_max: 10.0
+      dd_phi_max: 40.0
+
+
+  wheels: &wheels # start front left, counter-clockwise for base_drive_chain compatibility
+    - steer: f_caster_rotation_joint
+      drive: f_caster_r_wheel_joint
+      steer_neutral_position: 0.0
+      wheel_angle_offset_to_plf_x: 0.0
+      wheel_radius: 0.0782
+      controller_frame: base_link
+      fdm_link: base_baseplate_front_wheel_link
+    - steer: bl_caster_rotation_joint
+      drive: bl_caster_r_wheel_joint
+      steer_neutral_position: -180.0
+      wheel_angle_offset_to_plf_x: 0.0
+      wheel_radius: 0.0782
+      #x_pos: -0.219122
+      #y_pos: 0.247322
+      controller_frame: base_link
+      fdm_link: base_baseplate_back_left_wheel_link
+    - steer: br_caster_rotation_joint
+      drive: br_caster_r_wheel_joint
+      steer_neutral_position: 0.0
+      #wheel_angle_offset_to_plf_x: 0.0
+      wheel_radius: 0.0782
+      #x_pos: -0.219122
+      #y_pos: -0.247322
+      controller_frame: base_link
+      fdm_link: base_baseplate_back_right_wheel_link
