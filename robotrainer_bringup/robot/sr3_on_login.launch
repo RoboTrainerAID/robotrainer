@@ -8,11 +8,11 @@
 
     <include file="$(find iirob_led)/launch/iirob_led_rectangle.launch">
         <arg name="port" value="/dev/ttyUSB0"/>
-        <arg name="led_num" value="231"/>
+        <arg name="led_num" value="232"/>
         <arg name="rect_left_len" value="44" /> <!-- 0 is always front left corner, counting counter-clock weise -->
         <arg name="rect_back_len" value="72" />
         <arg name="rect_right_len" value="43" />
-        <arg name="rect_front_len" value="72" />
+        <arg name="rect_front_len" value="73" />
         <arg name="max_force" value="100" />
     </include>
 

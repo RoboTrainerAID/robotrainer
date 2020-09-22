@@ -33,19 +33,19 @@ joint_state_controller:
 
 ## twist_controller
 twist_controller:
-  type: cob_omni_drive_controller/WheelController
-  required_drive_mode: 3
-  #max_rot_velocity: 1.0
-  #max_trans_velocity: 1.0
-  pub_divider: 1
-  timeout: 0.5
+ type: robotrainer_controllers/TwistController
+ required_drive_mode: 3
+ max_rot_velocity: 1.2
+ max_trans_velocity: 1.2
+ pub_divider: 1
+ timeout: 0.5
 
-  defaults: *drive_defaults
-  wheels: *wheels
+ defaults: *drive_defaults
+ wheels: *wheels
 
-## odometry_controller
+## SR3 (RoboTrainer) odometry_controller
 odometry_controller:
-  type: cob_omni_drive_controller/OdometryController
+  type: robotrainer_controllers/OdometryController
   publish_rate: 50
   frame_id: "/odom_combined"
   child_frame_id: "/base_footprint"

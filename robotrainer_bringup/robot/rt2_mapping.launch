@@ -6,6 +6,7 @@
         <arg name="mapping" value="true"/>
         <arg name="enable_leg_tracking" value="false"/>
         <arg name="robotrainer_controller" value="twist_controller"/>
+<!--         <arg name="controllers_to_load" value="twist_controller"/> -->
     </include>
 
 </launch>

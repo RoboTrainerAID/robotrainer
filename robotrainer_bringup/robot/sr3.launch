@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-
     <arg name="robot" value="robotrainer2"/>
     <arg name="robot_env" default="$(optenv ROBOT_ENV ipr-robotrainer)"/>
     <arg name="RT2_ip" default="localhost"/>

@@ -60,6 +60,7 @@
 
     <!-- run scan unifier -->
 	<node pkg="cob_scan_unifier" type="scan_unifier_node" name="scan_unifier" output="log">
+<!-- 		<rosparam subst_value="True" param="input_scans">['/base_laser_left/scan', '/base_laser_right/scan']</rosparam> -->
 		<rosparam subst_value="True" param="input_scans">['/base_laser_left/scan', '/base_laser_right/scan', '/base_laser_back/scan']</rosparam>
 		<remap from="scan_unified" to="/scan_unified"/>
 	</node>

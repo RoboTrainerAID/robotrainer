@@ -9,6 +9,7 @@
     <arg name="RT2_ip" default="141.3.80.80"/>
 
     <arg name="robotrainer_controller" default="fts_controller"/>
+<!--     <arg name="controllers_to_load" default=""/> -->
     <arg name="controllers_to_load" default="twist_controller"/>
 
     <arg name="robotrainer_controller_yaml" default="rt2_base_controller.yaml"/>
@@ -43,6 +44,9 @@
         <arg name="sr3_controller" value="$(arg robotrainer_controller)"/>
         <arg name="controllers_to_load" value="$(arg controllers_to_load)"/>
     </include>
+    
+    <!-- Remap velocity smoother to joystick input to the controller -->
+<!--     <remap from="/base/twist_controller/command" to="/base/wheel_controller/twist_command" /> -->
     
     <!--  RoboTrainer-specific stuff -->
     <group if="$(arg enable_leg_tracking)">
