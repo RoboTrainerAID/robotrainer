@@ -7,8 +7,8 @@ fts_adaptive_force_controller:
   max_trans_velocity: 1.5 #0.2
   FTSBaseController:
     no_hw_output: False
-    debug: False
-    update_rate: 200.0
+    debug: True
+    update_rate: 200.0 # Check this
     # trigger inversion of y and rotation outputs
     y_reversed: False
     rot_reversed: False
