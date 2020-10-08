@@ -12,3 +12,6 @@ alias kin_rt2_14='rosservice call /robotrainer_hw/set_state "{angular_key: 1, li
 alias kin_rt2_51='rosservice call /robotrainer_hw/set_state "{angular_key: 5, linear_key: 1}"'
 alias kin_rt2_54='rosservice call /robotrainer_hw/set_state "{angular_key: 5, linear_key: 4}"'
 
+alias eval_record_base="bash `rospack find robotrainer_config`/scripts/record_base_values.bash ~/RT2_Data/RoSy_PreEval/"
+alias eval_record_cam="bash `rospack find robotrainer_config`/scripts/record_camera_values.bash ~/RT2_ta/RoSy_PreEval/Cams"
+

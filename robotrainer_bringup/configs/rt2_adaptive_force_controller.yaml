@@ -69,13 +69,13 @@ fts_adaptive_force_controller:
       use_passive_behavior_ctrlr: False         # whether to activate the passive behavior controller
       use_adaptive_force: False       # whether to use velocity-adaptive force feature
       force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
-        x: 1.2
-        y: 1.2
+        x: 1.7
+        y: 1.4
         rot: 1.0
       force_scale_max_vel:    # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
-        x: 0.45
-        y: 0.45
-        rot: 0.30
+        x: 0.5
+        y: 0.5
+        rot: 0.35
     # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
     transition:
       use_smooth_transition: True    # whether to use smooth transition function (adapts parameters faster with lower vel.)
