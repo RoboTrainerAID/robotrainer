@@ -26,8 +26,8 @@ Publish:
     sensor_data: false
     low_pass: false
     moving_mean: false
-    transformed_data: true
+    transformed_data: false
     gravity_compensated: false
-    threshold_filtered: true
+    threshold_filtered: false
     output_data: true
 

@@ -44,18 +44,21 @@
         <param name="host_ip" value="$(arg RT2_ip_wired)"/>
         <param name="sensor_ip" value="10.20.20.11"/>
         <param name="frame_id" value="base_laser_left_link"/>
+        <param name="expected_frequency" value="34.0"/>
     </node>
 
     <node ns="base_laser_right" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_right" output="screen">
         <param name="host_ip" value="$(arg RT2_ip_wired)"/>
         <param name="sensor_ip" value="10.20.20.12"/>
         <param name="frame_id" value="base_laser_right_link"/>
+        <param name="expected_frequency" value="34.0"/>
     </node>
     
     <node ns="base_laser_back" pkg="sick_safetyscanners" type="sick_safetyscanners_node" name="laser_back" output="screen">
         <param name="host_ip" value="$(arg RT2_ip_wired)"/>
         <param name="sensor_ip" value="10.20.20.13"/>
         <param name="frame_id" value="base_laser_back_link"/>
+        <param name="expected_frequency" value="34.0"/>
     </node>
 
     <!-- run scan unifier -->
