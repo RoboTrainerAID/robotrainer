@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="rosbag" type="record" name="rosbag_record_everything_else" args="-o studie_test -x '/cam*'"/>
+
+</launch>
