@@ -1,0 +1,19 @@
+frequency: 1  # Study status publishing frequency
+study_name: "RoSy_Prep"
+task_ids: ["P1", "T1", "T2-F1", "T2-F2", "T2-F3", "T2-F4", "T2-F5", "T3-L", "T3-C", "T4-A1", "T4-A2", "T5", "P3"]
+user_id_prefix: "U_"
+user_id_length: 3  # e.g. 000, 001, .., 028 (max: 999)
+
+# String has format:
+# study_name + output_string_separator +
+# user_id_prefix + user_id + output_string_separator +
+# task_id + "-" + trial
+output_string_separator: "_"
+
+use_led_output: True
+
+#external_commands:
+  #- "record_base": "` ~/RT2_Data/RoSy_PreEval/"
+  #- "record_cameras": "eval_record_camera ~/RT2_ta/RoSy_PreEval/Cams"
+  
+#run_command_on_task_change: ["record_base", "record_cameras"]
