@@ -1,15 +1,13 @@
 #!/bin/bash
 
-folder=$1
-if [ -z "$1" ]; then
+if [ -z "$folder" ]; then
   echo "No data folder provided. Using default Folder '$HOME/Bag_Data'."
   folder="$HOME/Bag_Data"
 else
   echo "Using '$folder' folder to store data"
 fi
 
-output_file_prefix=$2
-if [ -z "$2" ]; then
+if [ -z "$output_file_prefix" ]; then
   echo "No output file prefix provided. Using default 'RoSylerNT'."
   output_file_prefix="RoSylerNT_User_Sensors"
 fi
@@ -20,6 +18,8 @@ if [ ! -d "$folder" ]; then
 fi
 
 cd $folder
+
+bag_record_params=""
 
 full_list=()
 
@@ -86,7 +86,3 @@ study=(\
 /robotrainer_deviation/robotrainer_deviation_markers \
 )
 full_list+=(${study[*]})
-
-# echo ${standard[*]} ${base_controller[*]} ${adaptive_controller}
-
-rosbag record -o $output_file_prefix ${full_list[*]}

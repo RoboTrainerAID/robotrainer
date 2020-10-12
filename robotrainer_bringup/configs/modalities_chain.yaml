@@ -3,18 +3,19 @@
 
 robotrainer: #Common namespace for all robotrainer related params
   modalities_chain_config: #Configuration of the filter chain. Structure required by the filter chain. The order of the filters here defines the order of execution.
-    - name: areas_modality
-      type: robotrainer_modalities/VirtualAreasFilter
-      params: {}
+    # TODO(denis): Commented output for the RoSy-Study in Oct. 2020
+    #- name: areas_modality
+      #type: robotrainer_modalities/VirtualAreasFilter
+      #params: {}
     - name: forces_modalitiy
       type: robotrainer_modalities/VirtualForcesFilter
       params: {}
-    - name: counterforce_modalitiy
-      type: robotrainer_modalities/VirtualCounterforceFilter
-      params: {}
-    - name: walls_modality
-      type: robotrainer_modalities/VirtualWallsFilter
-      params: {}
-    - name: pathtracking_modality
-      type: robotrainer_modalities/PathTrackingFilter
-      params: {}
+    #- name: counterforce_modalitiy
+      #type: robotrainer_modalities/VirtualCounterforceFilter
+      #params: {}
+    #- name: walls_modality
+      #type: robotrainer_modalities/VirtualWallsFilter
+      #params: {}
+    #- name: pathtracking_modality
+      #type: robotrainer_modalities/PathTrackingFilter
+      #params: {}

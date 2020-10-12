@@ -2,8 +2,8 @@
 <launch>
 
     <include file="$(find robotrainer_bringup)/robot/rt2.launch" >
-        <arg name="robot_env" value="ipr-robotrainer-v2"/>
-<!--         <arg name="robot_env" value="dshs-rosylernt-eval-env"/> -->
+<!--         <arg name="robot_env" value="ipr-robotrainer-v2"/> -->
+        <arg name="robot_env" value="dshs-rosylernt-eval-env"/>
 <!--         <arg name="robot_env" value="ipr-seminarraum"/> -->
         <arg name="robotrainer_controller" default="fts_adaptive_force_controller"/>
         <arg name="robotrainer_controller_yaml" value="rt2_adaptive_force_controller.yaml"/>

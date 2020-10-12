@@ -1,15 +1,13 @@
 #!/bin/bash
 
-folder=$1
-if [ -z "$1" ]; then
+if [ -z "$folder" ]; then
   echo "No data folder provided. Using default Folder '$HOME/Bag_Data'."
   folder="$HOME/Bag_Data"
 else
   echo "Using '$folder' folder to store data"
 fi
 
-output_file_prefix=$2
-if [ -z "$2" ]; then
+if [ -z "$output_file_prefix" ]; then
   echo "No output file prefix provided. Using default 'RoSylerNT_User_Sensors'."
   output_file_prefix="RoSylerNT_User_Sensors"
 fi
@@ -20,6 +18,8 @@ if [ ! -d "$folder" ]; then
 fi
 
 cd $folder
+
+bag_record_params="--udp"
 
 full_list=()
 
@@ -56,5 +56,3 @@ lower_body_camera=(\
 /lower_legs_camera/rgb/image_raw \
 )
 full_list+=(${lower_body_camera[*]})
-
-rosbag record --udp -p -o $output_file_prefix  ${full_list[*]}

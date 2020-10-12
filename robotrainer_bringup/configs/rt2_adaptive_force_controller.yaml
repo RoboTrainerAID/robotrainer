@@ -65,21 +65,32 @@ fts_adaptive_force_controller:
   # Maximum or minimum values for these fields are defined in the comments 
   FTSAdaptiveForceController:
     #adapt the maximum input forces of the system
-    adaptive_force:
+    velocity_adaption:
       use_passive_behavior_ctrlr: False         # whether to activate the passive behavior controller
-      use_adaptive_force: False       # whether to use velocity-adaptive force feature
       force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
-        x: 1.7
-        y: 1.4
+        x: 1.2
+        y: 1.2
         rot: 1.0
       force_scale_max_vel:    # force scaling factor (moving at max vel) [max: 1.0] - lower means easier to maintain high speeds
-        x: 0.5
-        y: 0.5
-        rot: 0.35
-    # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
-    transition:
-      use_smooth_transition: True    # whether to use smooth transition function (adapts parameters faster with lower vel.)
-      transition_rate: 0.35            # Value between 0.05 and 1.0 (changes how fast parameter will be adapted with low vel.)
+        x: 0.45
+        y: 0.45
+        rot: 0.3
+      damping_adaption:
+        min:
+          x: 0.4
+          y: 0.4
+          rot: 0.4
+        max:
+          x: 1.0
+          y: 1.0    
+          rot: 1.0
+      tanh:
+        x: 1.1
+        y: 1.2
+        rot: 1.2
+      # define the type of transition function to use for adapt_mass/adapt_damping/adapt_force
+      transition:
+        transition_rate: 0.35            # Value between 0.05 and 1.0 (changes how fast parameter will be adapted with low vel.)
 
     parametrization:
       x_base:

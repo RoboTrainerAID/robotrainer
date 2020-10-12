@@ -12,8 +12,17 @@ output_string_separator: "_"
 
 use_led_output: True
 
-#external_commands:
-  #- "record_base": "` ~/RT2_Data/RoSy_PreEval/"
-  #- "record_cameras": "eval_record_camera ~/RT2_ta/RoSy_PreEval/Cams"
+stop_on_trial_change: False
+stop_on_task_change: True
+stop_on_user_id_change: True
+
+# TODO(denis) check how to resolve $HOME in python
+manager_status_file: "/home/robotrainer/.RoboTrainer/study_manager_status.status"
+external_status_files:
+  "record_base": "/home/robotrainer/.RoboTrainer/study_record_base.status"
+  "record_cameras": "/home/robotrainer/.RoboTrainer/study_record_cam.status"
   
-#run_command_on_task_change: ["record_base", "record_cameras"]
+update_external_status_on_trial_change:
+  "1": ["record_cameras"]
+update_external_status_on_task_change: 
+  "all": ["record_base"]

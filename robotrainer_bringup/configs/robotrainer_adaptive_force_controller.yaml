@@ -35,7 +35,7 @@ fts_adaptive_force_controller:
     rot_max_torque: 30.0
     rot_max_rot_vel: 1.2
     rot_gain: 1.0
-    rot_time_const: 0.5
+    rot_time_const: 0.1
     #parameters for global control actions come hereafter
     global_control_actions:
       # adapt the center of gravity
@@ -56,7 +56,7 @@ fts_adaptive_force_controller:
   FTSAdaptiveForceController:
     #adapt the maximum input forces of the system
     adaptive_force:
-      use_passive_behavior_ctrlr: False         # whether to activate the passive behavior controller
+      use_passive_behavior_ctrlr: True         # whether to activate the passive behavior controller
       use_adaptive_force: False       # whether to use velocity-adaptive force feature
       force_scale_zero_vel:   # force scaling factor (accelerating from zero) [min: 1.0] - higher means heavier
         x: 1.7

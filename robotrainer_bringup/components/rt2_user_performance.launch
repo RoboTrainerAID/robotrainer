@@ -7,8 +7,4 @@
 <!--  <node name="classical_user_performance" pkg="classical_user_performance" type="user_performance.py">
   </node>-->
   
-  <include file="$(find classical_user_performance)/launch/user_study_manager.launch">
-    <arg name="yaml_to_load" value="$(find robotrainer_config)/user_studies/RoSy_Prep.yaml"/>
-  </include>
-
 </launch>

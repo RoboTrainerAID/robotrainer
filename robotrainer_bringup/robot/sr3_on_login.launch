@@ -32,6 +32,12 @@
     </include>
     <include file="$(find cob_bringup)/tools/battery_monitor.launch" >
         <arg name="robot" value="$(arg robot)" />
-    </include>-->
+    </include>--> 
+    
+    <!-- Sync node - This can also be with the system --> 
+    <include file="$(find robotrainer_bringup)/components/rt2_external_sync.launch">
+      <arg name="sync_to_topic_vec3" default="/base/virtual_forces/modalities_debug/resulting_force"/>
+      <arg name="set_service" value="/phidgets/base_monitor/set_digital"/>
+    </include>
 
 </launch>
