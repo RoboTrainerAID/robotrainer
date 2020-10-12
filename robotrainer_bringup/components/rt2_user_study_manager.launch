@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <include file="$(find classical_user_performance)/launch/user_study_manager.launch">
+    <arg name="yaml_to_load" value="$(find robotrainer_config)/user_studies/RoSy_Prep.yaml"/>
+  </include>
+
+</launch>

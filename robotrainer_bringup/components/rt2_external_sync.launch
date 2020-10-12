@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="sync_to_topic_vec3" default="~/topic_input_sync"/>
+  <arg name="set_service" default="~/external_sync_service"/>
+  
+    <node
+            pkg="robotrainer_controllers"
+            type="sca_digital_output.py"
+            name="rt2_sca_sync_node"
+            output="screen">
+        <remap from="input_data" to="$(arg sync_to_topic_vec3)"/>
+        <remap from="sync_signal" to="~/sync_signal"/>
+        <remap from="set_service" to="$(arg set_service)"/>
+    </node>
+
+</launch>

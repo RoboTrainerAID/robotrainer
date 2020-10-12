@@ -1,0 +1,67 @@
+#!/bin/bash
+trap "kill 0" EXIT
+
+# File to get commands and store pid
+file="$HOME/$1"
+if [ -z "$1" ]; then
+  echo "No file provided exiting."
+  exit
+fi
+
+# Configuration file to source
+config=$2
+if [ -z "$2" ]; then
+  echo "No configuration file to source provided exiting."
+  exit
+fi
+
+# Folder for the Bag
+folder=$3
+
+# Bag file prefix
+output_file_prefix=$4
+
+source $config
+
+pid_file="$file.pid"
+
+echo "" > $file
+echo "" > $pid_file
+
+started=false
+parameter=""
+pid=-1
+
+while :
+do 
+    first_line=$(head -n 1 $file)  
+    if [ "$first_line" = "START" ]  && [ "$started" = false ]; then
+        second_line=$(head -n 2 $file | tail -1)
+        echo "" > $file
+        if [ ! -z "$second_line" ]; then
+            output_file_prefix=$second_line
+            echo "Using prefix: $output_file_prefix"
+        fi
+        rosbag record $bag_record_params -p -o $output_file_prefix ${full_list[*]} &
+        pid=$!
+        echo "The rosbag is be started with the PID $pid"
+        echo $pid > $pid_file
+        started=true
+    elif [ "$first_line" = "STOP" ] && [ "$started" = true ]; then
+        kill -2 $pid
+        echo "-" > $file
+        echo "The rosbag is stopped by the command"
+    fi
+    if [ "$started" = true ]; then
+        kill -0 $pid
+        status=$?
+        if [ "$status" = "1" ]; then
+            started=false
+            echo "Process with PID $pid has stopped!"
+            pid="-----"
+            echo "-" > $file
+            echo $pid > $pid_file
+        fi
+    fi
+    sleep 0.1
+done
