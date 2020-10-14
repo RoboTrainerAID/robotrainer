@@ -27,9 +27,15 @@ full_list=()
 standard=(\ 
 /tf /tf_static /map /map_metadata  /amcl_pose \
 /base/joint_states \
+/joint_states \
 /base/odometry_controller/odometry \
 )
 full_list+=(${standard[*]})
+# Laser Scanners
+laser_scanner=(\
+/scan_unified \
+)
+full_list+=(${laser_scanner[*]})
 # /scan_unified \
 # /joint_states \
 # Base Controller
@@ -80,6 +86,7 @@ robot_state=(\
 full_list+=(${robot_state[*]})
 # Study
 study=(\
+/rt2_sca_sync_node/sync_signal \
 /robotrainer_user_study_manager/study_status \
 /robotrainer_deviation/current_path_index \
 /robotrainer_deviation/robotrainer_deviation \

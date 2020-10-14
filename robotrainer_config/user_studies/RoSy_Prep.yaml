@@ -1,6 +1,6 @@
 frequency: 1  # Study status publishing frequency
-study_name: "RoSy_Prep"
-task_ids: ["P1", "T1", "T2-F1", "T2-F2", "T2-F3", "T2-F4", "T2-F5", "T3-L", "T3-C", "T4-A1", "T4-A2", "T5", "P3"]
+study_name: "RoSy_Eval"
+task_ids: ["P1", "T1", "T2", "T3-L", "P2", "T4-A1", "T4-A2", "T3-C", "P3", "T5"]
 user_id_prefix: "U_"
 user_id_length: 3  # e.g. 000, 001, .., 028 (max: 999)
 
@@ -12,7 +12,7 @@ output_string_separator: "_"
 
 use_led_output: True
 
-stop_on_trial_change: False
+stop_on_trial_change: True
 stop_on_task_change: True
 stop_on_user_id_change: True
 
@@ -23,6 +23,7 @@ external_status_files:
   "record_cameras": "/home/robotrainer/.RoboTrainer/study_record_cam.status"
   
 update_external_status_on_trial_change:
-  "1": ["record_cameras"]
-update_external_status_on_task_change: 
+  "2": ["record_cameras"]
   "all": ["record_base"]
+#update_external_status_on_task_change: 
+  #"all": ["record_base"]

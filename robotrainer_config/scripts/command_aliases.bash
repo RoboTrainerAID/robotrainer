@@ -19,7 +19,10 @@ alias kin_rt2_54='rosservice call /robotrainer_hw/set_state "{angular_key: 5, li
 # alias eval_record_cam="bash `rospack find robotrainer_config`/scripts/record_camera_values.bash ~/RT2_ta/RoSy_PreEval/Cams"
 
 # Recording for Eval with observers
-alias eval_record_base_bg="bash `rospack find robotrainer_config`/scripts/record_bag_in_background.bash .RoboTrainer/study_record_base.status `rospack find robotrainer_config`/scripts/record_base_values.bash ~/RT2_Data/RoSy_PreEval/"
+alias eval_record_base_bg="bash `rospack find robotrainer_config`/scripts/record_bag_in_background.bash .RoboTrainer/study_record_base.status `rospack find robotrainer_config`/scripts/record_base_values.bash ~/RT2_Data/RoSy_Eval/"
 
-alias eval_record_cam_bg="bash `rospack find robotrainer_config`/scripts/record_bag_in_background.bash .RoboTrainer/study_record_cam.status `rospack find robotrainer_config`/scripts/record_camera_values.bash ~/RT2_Data/RoSy_PreEval/Cams"
+alias eval_record_cam_bg="bash `rospack find robotrainer_config`/scripts/record_bag_in_background.bash .RoboTrainer/study_record_cam.status `rospack find robotrainer_config`/scripts/record_camera_values.bash ~/RT2_Data/RoSy_Eval/Cams"
+
+
+alias rt2_call_start_services="rosservice call /rt2_sca_sync_node/send_sync_signal_1s \"{}\" & rosservice call /robotrainer_deviation/reset \"{}\""
 

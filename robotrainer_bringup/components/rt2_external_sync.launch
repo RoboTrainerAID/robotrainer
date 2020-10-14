@@ -3,6 +3,7 @@
 
   <arg name="sync_to_topic_vec3" default="~/topic_input_sync"/>
   <arg name="set_service" default="~/external_sync_service"/>
+  <arg name="manual_trigger" default="~/send_sync_signal_1s"/>
   
     <node
             pkg="robotrainer_controllers"
@@ -10,8 +11,9 @@
             name="rt2_sca_sync_node"
             output="screen">
         <remap from="input_data" to="$(arg sync_to_topic_vec3)"/>
-        <remap from="sync_signal" to="~/sync_signal"/>
+        <remap from="sync_signal_debug" to="~/sync_signal"/>
         <remap from="set_service" to="$(arg set_service)"/>
+        <remap from="manual_trigger" to="$(arg manual_trigger)"/>
     </node>
 
 </launch>

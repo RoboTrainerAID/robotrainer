@@ -19,7 +19,7 @@ fi
 
 cd $folder
 
-bag_record_params="--udp"
+bag_record_params="--udp --duration=30"
 
 full_list=()
 
@@ -56,3 +56,10 @@ lower_body_camera=(\
 /lower_legs_camera/rgb/image_raw \
 )
 full_list+=(${lower_body_camera[*]})
+# Study
+study=(\
+/rt2_sca_sync_node/sync_signal \
+/robotrainer_user_study_manager/study_status \
+)
+full_list+=(${study[*]})
+
