@@ -2,7 +2,8 @@
 <launch>
 
     <include file="$(find robotrainer_bringup)/robot/rt2.launch" >
-        <arg name="robot_env" value="ipr-robotrainer-v2"/>
+        <!-- <arg name="robot_env" value="ipr-robotrainer-v2"/> -->
+        <arg name="robot_env" value="iras"/>
         <arg name="mapping" value="true"/>
         <arg name="enable_leg_tracking" value="false"/>
         <arg name="robotrainer_controller" value="twist_controller"/>
